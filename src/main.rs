@@ -24,13 +24,11 @@ fn diagnostics_freq(d: &Vec<u64>) -> (u64, u64) { // (gamma, epsilon) aka (most 
         let mut pos = 0;
         while &mask < num || pos < counts.len() {
             if counts.len() <= pos { counts.push(Count(0, 0)); }
-            if let Some(count) = counts.get_mut(pos) {
-                if mask & num > 0 {
-                    (*count).1 += 1;
-                } else {
-                    (*count).0 += 1;
-                }
-            }
+            counts.get_mut(pos)
+                .and_then(|count| {
+                    if mask & num > 0 { (*count).1 += 1; } else { (*count).0 += 1; };
+                    Some(count)
+                });
             pos += 1;
             mask *= 2;
         }

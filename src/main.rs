@@ -71,11 +71,11 @@ fn find_sliding_window_increases(d: &Vec<u32>) -> usize {
 }
 
 /// Returns (distance, depth) after piloting the moves
-fn pilot(cmds: &Vec<(&str, u32)>) -> (u32, u32) {
+fn pilot(cmds: &Vec<(String, u32)>) -> (u32, u32) {
     let mut depth = 0;
     let mut distance = 0;
     cmds.iter().for_each(|cmd| {
-        match cmd.0 {
+        match cmd.0.as_str() {
             "forward" => distance += cmd.1,
             "down" => depth += cmd.1,
             "up" => depth -= cmd.1,
@@ -151,20 +151,55 @@ mod test {
 
     #[test]
     fn test_find_increases() {
-        let data = vec![199, 200, 208, 210, 200, 207, 240, 269, 260, 263];
-        assert_eq!(find_increases(&data), 7);
+        let depths = data::parse_u32s(r"
+            199
+            200
+            208
+            210
+            200
+            207
+            240
+            269
+            260
+            263
+        ");
+        assert_eq!(find_increases(&depths), 7);
     }
 
     #[test]
     fn test_find_sliding_window_increases() {
-        let data = vec![199, 200, 208, 210, 200, 207, 240, 269, 260, 263];
-        assert_eq!(find_sliding_window_increases(&data), 5);
+        let depths = data::parse_u32s(r"
+            199
+            200
+            208
+            210
+            200
+            207
+            240
+            269
+            260
+            263
+        ");
+        assert_eq!(find_sliding_window_increases(&depths), 5);
     }
 
     #[test]
     fn test_find_bit_frequencies() {
-        let data = vec![0b00100, 0b11110, 0b10110, 0b10111, 0b10101, 0b01111, 0b00111, 0b11100, 0b10000, 0b11001, 0b00010, 0b01010];
-        let (gamma, epsilon) = find_bit_frequencies(&data);
+        let numbers = data::parse_binary_u64s(r"
+            00100
+            11110
+            10110
+            10111
+            10101
+            01111
+            00111
+            11100
+            10000
+            11001
+            00010
+            01010
+        ");
+        let (gamma, epsilon) = find_bit_frequencies(&numbers);
         assert_eq!(gamma, 22);
         assert_eq!(epsilon, 9);
         assert_eq!(gamma * epsilon, 198);
@@ -172,14 +207,14 @@ mod test {
 
     #[test]
     fn test_pilot() {
-        let cmds = vec![
-            ("forward", 5),
-            ("down", 5),
-            ("forward", 8),
-            ("up", 3),
-            ("down", 8),
-            ("forward", 2),
-        ];
+        let cmds = data::parse_cmds(r"
+            forward 5
+            down 5
+            forward 8
+            up 3
+            down 8
+            forward 2
+        ");
         let (distance, depth) = pilot(&cmds);
         assert_eq!(distance, 15);
         assert_eq!(depth, 10);
@@ -222,19 +257,18 @@ mod test {
 
     #[test]
     fn test_find_intersections() {
-        let segments = vec![
-            ((0,9), (5,9)),
-            ((8,0), (0,8)),
-            ((9,4), (3,4)),
-            ((2,2), (2,1)),
-            ((7,0), (7,4)),
-            ((6,4), (2,0)),
-            ((0,9), (2,9)),
-            ((3,4), (1,4)),
-            ((0,0), (8,8)),
-            ((5,5), (8,2)),
-        ];
-
+        let segments = data::parse_segments(r"
+            0,9 -> 5,9
+            8,0 -> 0,8
+            9,4 -> 3,4
+            2,2 -> 2,1
+            7,0 -> 7,4
+            6,4 -> 2,0
+            0,9 -> 2,9
+            3,4 -> 1,4
+            0,0 -> 8,8
+            5,5 -> 8,2
+        ");
         let (_, num_intersections) = find_intersections(&segments);
         assert_eq!(num_intersections, 5);
     }

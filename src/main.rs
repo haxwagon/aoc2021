@@ -1,21 +1,10 @@
+use std::collections::HashMap;
+use std::cmp::{max, min};
 
 mod data;
 
-fn depth_increases(d: &Vec<u32>) -> usize {
-    d.iter().enumerate()
-        .skip(1)
-        .filter(|x| &d[x.0-1]  < x.1)
-        .count()
-}
-
-fn depth_sliding_window_increases(d: &Vec<u32>) -> usize {
-    d.iter().enumerate()
-        .skip(3)
-        .filter(|x| (&d[x.0-3] + &d[x.0-2] + &d[x.0-1])  < (&d[x.0-2] + &d[x.0-1] + &d[x.0]))
-        .count()
-}
-
-fn diagnostics_freq(d: &Vec<u64>) -> (u64, u64) { // (gamma, epsilon) aka (most common bits, least common bits)
+/// Returns (gamma, epsilon) aka (most common bits, least common bits)
+fn find_bit_frequencies(d: &Vec<u64>) -> (u64, u64) {
     #[derive(Debug)]
     struct Count(u32, u32);
     let mut counts = Vec::<Count>::new();
@@ -42,6 +31,43 @@ fn diagnostics_freq(d: &Vec<u64>) -> (u64, u64) { // (gamma, epsilon) aka (most 
         order *= 2;
     });
     (gamma, epsilon)
+}
+
+fn find_increases(d: &Vec<u32>) -> usize {
+    d.iter().enumerate()
+        .skip(1)
+        .filter(|x| &d[x.0-1]  < x.1)
+        .count()
+}
+
+/// Returns (all represented points, num points with > 1 line through it)
+/// also ignores all angled lines
+fn find_intersections(segments : &Vec<((u32,u32),(u32,u32))>) -> (HashMap<(u32,u32), u32>, usize) {
+    let mut intersections = HashMap::new();
+    segments.iter().for_each(|segment| {
+        if segment.0.0 == segment.1.0 {
+            for y in min(segment.0.1, segment.1.1)..=max(segment.0.1, segment.1.1) {
+                *intersections.entry((segment.0.0, y)).or_insert(0) += 1;
+            }
+        } else if segment.0.1 == segment.1.1 {
+            for x in min(segment.0.0, segment.1.0)..=max(segment.0.0, segment.1.0) {
+                *intersections.entry((x, segment.0.1)).or_insert(0) += 1;
+            }
+        }
+    });
+
+    let num_intersections = intersections.iter()
+        .filter(|x| *x.1 > 1)
+        .count();
+
+    (intersections, num_intersections)
+}
+
+fn find_sliding_window_increases(d: &Vec<u32>) -> usize {
+    d.iter().enumerate()
+        .skip(3)
+        .filter(|x| (&d[x.0-3] + &d[x.0-2] + &d[x.0-1])  < (&d[x.0-2] + &d[x.0-1] + &d[x.0]))
+        .count()
 }
 
 /// Returns index of winning board and score
@@ -86,15 +112,18 @@ fn play_bingo(calls: &Vec<u32>, boards: &Vec<Board>) -> Option<(usize, u64)> {
 
 fn main() {
     let depths = data::get_depths();
-    println!("Depth Increases={}, Depth Sliding Window Increases={}", depth_increases(&depths), depth_sliding_window_increases(&depths));
+    println!("Depth Increases={}, Depth Sliding Window Increases={}",
+             find_increases(&depths), find_sliding_window_increases(&depths));
     let diagnostics = data::get_diagnostics();
-    let (gamma, epsilon) = diagnostics_freq(&diagnostics);
+    let (gamma, epsilon) = find_bit_frequencies(&diagnostics);
     println!("Gamma={}, Epsilon={}, Power Consumption={}", gamma, epsilon, gamma * &epsilon);
     let bingo_data = data::get_bingo();
     match play_bingo(&bingo_data.0, &bingo_data.1) {
         Some(results) => println!("Board {} wins bingo with a score of {}", results.0, results.1),
         None => println!("No one wins bingo!"),
     }
+    let (_, num_vent_intersections) = find_intersections(&data::get_vents());
+    println!("Number of vent intersections={}", num_vent_intersections);
 }
 
 #[cfg(test)]
@@ -102,28 +131,27 @@ mod test {
     use super::*;
 
     #[test]
-    fn test_depth_increases() {
-        let depths = vec![199, 200, 208, 210, 200, 207, 240, 269, 260, 263];
-        assert_eq!(depth_increases(&depths), 7);
+    fn test_find_increases() {
+        let data = vec![199, 200, 208, 210, 200, 207, 240, 269, 260, 263];
+        assert_eq!(find_increases(&data), 7);
     }
 
     #[test]
-    fn test_sliding_window_increases() {
-        let depths = vec![199, 200, 208, 210, 200, 207, 240, 269, 260, 263];
-        assert_eq!(depth_sliding_window_increases(&depths), 5);
+    fn test_find_sliding_window_increases() {
+        let data = vec![199, 200, 208, 210, 200, 207, 240, 269, 260, 263];
+        assert_eq!(find_sliding_window_increases(&data), 5);
     }
 
     #[test]
-    fn test_diagnostics_freq() {
-        let diagnostics = vec![0b00100, 0b11110, 0b10110, 0b10111, 0b10101, 0b01111, 0b00111, 0b11100, 0b10000, 0b11001, 0b00010, 0b01010];
-        let (gamma, epsilon) = diagnostics_freq(&diagnostics);
+    fn test_find_bit_frequencies() {
+        let data = vec![0b00100, 0b11110, 0b10110, 0b10111, 0b10101, 0b01111, 0b00111, 0b11100, 0b10000, 0b11001, 0b00010, 0b01010];
+        let (gamma, epsilon) = find_bit_frequencies(&data);
         assert_eq!(gamma, 22);
         assert_eq!(epsilon, 9);
         assert_eq!(gamma * epsilon, 198);
     }
 
     #[test]
-
     fn test_play_bingo() {
         let calls = vec![7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1];
         let boards = vec![
@@ -156,5 +184,24 @@ mod test {
             },
             None => panic!("No winner found!"),
         }
+    }
+
+    #[test]
+    fn test_find_intersections() {
+        let segments = vec![
+            ((0,9), (5,9)),
+            ((8,0), (0,8)),
+            ((9,4), (3,4)),
+            ((2,2), (2,1)),
+            ((7,0), (7,4)),
+            ((6,4), (2,0)),
+            ((0,9), (2,9)),
+            ((3,4), (1,4)),
+            ((0,0), (8,8)),
+            ((5,5), (8,2)),
+        ];
+
+        let (_, num_intersections) = find_intersections(&segments);
+        assert_eq!(num_intersections, 5);
     }
 }

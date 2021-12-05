@@ -70,6 +70,22 @@ fn find_sliding_window_increases(d: &Vec<u32>) -> usize {
         .count()
 }
 
+/// Returns (distance, depth) after piloting the moves
+fn pilot(cmds: &Vec<(&str, u32)>) -> (u32, u32) {
+    let mut depth = 0;
+    let mut distance = 0;
+    cmds.iter().for_each(|cmd| {
+        match cmd.0 {
+            "forward" => distance += cmd.1,
+            "down" => depth += cmd.1,
+            "up" => depth -= cmd.1,
+            _ => {},
+        }
+    });
+
+    (distance, depth)
+}
+
 /// Returns index of winning board and score
 type Board = [u32;25];
 fn play_bingo(calls: &Vec<u32>, boards: &Vec<Board>) -> Option<(usize, u64)> {
@@ -114,6 +130,9 @@ fn main() {
     let depths = data::get_depths();
     println!("Depth Increases={}, Depth Sliding Window Increases={}",
              find_increases(&depths), find_sliding_window_increases(&depths));
+    let cmds = data::get_cmds();
+    let (distance, depth) = pilot(&cmds);
+    println!("Piloted forward {} and at a depth of {} for a total of {}", distance, depth, distance * depth);
     let diagnostics = data::get_diagnostics();
     let (gamma, epsilon) = find_bit_frequencies(&diagnostics);
     println!("Gamma={}, Epsilon={}, Power Consumption={}", gamma, epsilon, gamma * &epsilon);
@@ -149,6 +168,21 @@ mod test {
         assert_eq!(gamma, 22);
         assert_eq!(epsilon, 9);
         assert_eq!(gamma * epsilon, 198);
+    }
+
+    #[test]
+    fn test_pilot() {
+        let cmds = vec![
+            ("forward", 5),
+            ("down", 5),
+            ("forward", 8),
+            ("up", 3),
+            ("down", 8),
+            ("forward", 2),
+        ];
+        let (distance, depth) = pilot(&cmds);
+        assert_eq!(distance, 15);
+        assert_eq!(depth, 10);
     }
 
     #[test]

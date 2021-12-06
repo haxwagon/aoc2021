@@ -126,6 +126,22 @@ fn play_bingo(calls: &Vec<u32>, boards: &Vec<Board>) -> Option<(usize, u64)> {
     return None
 }
 
+fn simulate_lanternfish(fish : &[u64;9], num_days: u32) -> ([u64;9], u64) {
+    let mut new_fish = [0;9];
+    for i in 0..9 { new_fish[i] = fish[i] }
+
+    for _ in 0..num_days {
+        let num_reproducing = new_fish[0];
+        for i in 0..8 { new_fish[i] = new_fish[i+1]; }
+        new_fish[8] = num_reproducing;
+        new_fish[6] += num_reproducing;
+    }
+
+    let mut num_fish = 0;
+    for i in 0..9 { num_fish += new_fish[i] }
+    (new_fish, num_fish)
+}
+
 fn main() {
     let depths = data::get_depths();
     println!("Depth Increases={}, Depth Sliding Window Increases={}",
@@ -143,6 +159,8 @@ fn main() {
     }
     let (_, num_vent_intersections) = find_intersections(&data::get_vents());
     println!("Number of vent intersections={}", num_vent_intersections);
+    let (_, num_lanternfish) = simulate_lanternfish(&data::get_lanternfish(), 80);
+    println!("There will be {} lanternfish after 80 days", num_lanternfish);
 }
 
 #[cfg(test)]
@@ -222,31 +240,28 @@ mod test {
 
     #[test]
     fn test_play_bingo() {
-        let calls = vec![7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1];
-        let boards = vec![
-            [
-                22, 13, 17, 11,  0,
-                 8,  2, 23,  4, 24,
-                21,  9, 14, 16,  7,
-                 6, 10,  3, 18,  5,
-                 1, 12, 20, 15, 19,
-            ],
-            [
-                 3, 15,  0,  2, 22,
-                 9, 18, 13, 17,  5,
-                19,  8,  7, 25, 23,
-                20, 11, 10, 24,  4,
-                14, 21, 16, 12,  6,
-            ],
-            [
-                14, 21, 17, 24,  4,
-                10, 16, 15,  9, 19,
-                18,  8, 23, 26, 20,
-                22, 11, 13,  6,  5,
-                 2,  0, 12,  3,  7,
-            ],
-        ];
-        match play_bingo(&calls, &boards) {
+        let (calls, boards) = data::parse_bingo(r"
+            7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1
+
+            22 13 17 11  0
+            8  2 23  4 24
+            21  9 14 16  7
+            6 10  3 18  5
+            1 12 20 15 19
+
+            3 15  0  2 22
+            9 18 13 17  5
+            19  8  7 25 23
+            20 11 10 24  4
+            14 21 16 12  6
+
+            14 21 17 24  4
+            10 16 15  9 19
+            18  8 23 26 20
+            22 11 13  6  5
+            2  0 12  3  7
+        ");
+                        match play_bingo(&calls, &boards) {
             Some(result) => {
                 assert_eq!(result.0, 2);
                 assert_eq!(result.1, 4512);
@@ -271,5 +286,18 @@ mod test {
         ");
         let (_, num_intersections) = find_intersections(&segments);
         assert_eq!(num_intersections, 5);
+    }
+
+    #[test]
+    fn test_lanternfish() {
+        let fish = data::parse_lanternfish("3,4,3,1,2");
+        {
+            let (_, num_fish) = simulate_lanternfish(&fish, 18);
+            assert_eq!(num_fish, 26);
+        }
+        {
+            let (_, num_fish) = simulate_lanternfish(&fish, 80);
+            assert_eq!(num_fish, 5934);
+        }
     }
 }

@@ -70,6 +70,28 @@ fn find_sliding_window_increases(d: &Vec<u32>) -> usize {
         .count()
 }
 
+fn find_cheapest_alignment(d: &Vec<u32>) -> (u32, u32) {
+    let pos_cost = |pos : u32| -> u32 { d.iter().map(|n| (pos as i32 - *n as i32).abs() as u32).sum() };
+    let mut best_pos = d.iter().sum::<u32>() / d.len() as u32;
+    let mut best_cost = pos_cost(best_pos);
+    let mut search = |dir : i32| {
+        let mut pos = (best_pos as i32 + dir) as u32; 
+        loop {
+            let cost = pos_cost(pos); 
+            if cost < best_cost { 
+                best_cost = cost;
+                best_pos = pos;
+            } else if cost > best_cost {
+                break
+            }
+            pos = (pos as i32 + dir) as u32;
+        }
+    };
+    search(1);
+    search(-1);
+    (best_pos, best_cost)
+}
+
 /// Returns (distance, depth) after piloting the moves
 fn pilot(cmds: &Vec<(String, u32)>) -> (u32, u32) {
     let mut depth = 0;
@@ -161,11 +183,43 @@ fn main() {
     println!("Number of vent intersections={}", num_vent_intersections);
     let (_, num_lanternfish) = simulate_lanternfish(&data::get_lanternfish(), 80);
     println!("There will be {} lanternfish after 80 days", num_lanternfish);
+    let (alignment_pos, alignment_cost) = find_cheapest_alignment(&data::get_crab_positions());
+    println!("The crabs would best align at position {} with a total cost of {}", alignment_pos, alignment_cost);
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn test_find_bit_frequencies() {
+        let numbers = data::parse_binary_u64s(r"
+            00100
+            11110
+            10110
+            10111
+            10101
+            01111
+            00111
+            11100
+            10000
+            11001
+            00010
+            01010
+        ");
+        let (gamma, epsilon) = find_bit_frequencies(&numbers);
+        assert_eq!(gamma, 22);
+        assert_eq!(epsilon, 9);
+        assert_eq!(gamma * epsilon, 198);
+    }
+    
+    #[test]
+    fn test_find_cheapest_alignment() {
+        let positions = data::parse_positions("16,1,2,0,4,2,7,1,2,14");
+        let (pos, cost) = find_cheapest_alignment(&positions);
+        assert_eq!(pos, 2);
+        assert_eq!(cost, 37);
+    }
 
     #[test]
     fn test_find_increases() {
@@ -199,28 +253,6 @@ mod test {
             263
         ");
         assert_eq!(find_sliding_window_increases(&depths), 5);
-    }
-
-    #[test]
-    fn test_find_bit_frequencies() {
-        let numbers = data::parse_binary_u64s(r"
-            00100
-            11110
-            10110
-            10111
-            10101
-            01111
-            00111
-            11100
-            10000
-            11001
-            00010
-            01010
-        ");
-        let (gamma, epsilon) = find_bit_frequencies(&numbers);
-        assert_eq!(gamma, 22);
-        assert_eq!(epsilon, 9);
-        assert_eq!(gamma * epsilon, 198);
     }
 
     #[test]

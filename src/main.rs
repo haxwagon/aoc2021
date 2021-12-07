@@ -63,13 +63,14 @@ fn find_intersections(segments : &Vec<((u32,u32),(u32,u32))>) -> (HashMap<(u32,u
     (intersections, num_intersections)
 }
 
-fn find_sliding_window_increases(d: &Vec<u32>) -> usize {
+fn find_sliding_window_increases(d: &Vec<u32>, window: u32) -> usize {
     d.iter().enumerate()
-        .skip(3)
-        .filter(|x| (&d[x.0-3] + &d[x.0-2] + &d[x.0-1])  < (&d[x.0-2] + &d[x.0-1] + &d[x.0]))
+        .skip(window as usize)
+        .filter(|x| (1..=window).map(|i| &d[x.0-(i as usize)]).sum::<u32>() < (0..window).map(|i| &d[x.0-(i as usize)]).sum::<u32>())
         .count()
 }
 
+/// Finds the cheapest position which would require the least number of moves by the swarm to align
 fn find_cheapest_alignment(d: &Vec<u32>) -> (u32, u32) {
     let pos_cost = |pos : u32| -> u32 { d.iter().map(|n| (pos as i32 - *n as i32).abs() as u32).sum() };
     let mut best_pos = d.iter().sum::<u32>() / d.len() as u32;
@@ -148,6 +149,7 @@ fn play_bingo(calls: &Vec<u32>, boards: &Vec<Board>) -> Option<(usize, u64)> {
     return None
 }
 
+/// Returns (number of fish by days until new gen, total number of fish)
 fn simulate_lanternfish(fish : &[u64;9], num_days: u32) -> ([u64;9], u64) {
     let mut new_fish = [0;9];
     for i in 0..9 { new_fish[i] = fish[i] }
@@ -167,7 +169,7 @@ fn simulate_lanternfish(fish : &[u64;9], num_days: u32) -> ([u64;9], u64) {
 fn main() {
     let depths = data::get_depths();
     println!("Depth Increases={}, Depth Sliding Window Increases={}",
-             find_increases(&depths), find_sliding_window_increases(&depths));
+             find_increases(&depths), find_sliding_window_increases(&depths, 3));
     let cmds = data::get_cmds();
     let (distance, depth) = pilot(&cmds);
     println!("Piloted forward {} and at a depth of {} for a total of {}", distance, depth, distance * depth);
@@ -252,7 +254,8 @@ mod test {
             260
             263
         ");
-        assert_eq!(find_sliding_window_increases(&depths), 5);
+        assert_eq!(find_sliding_window_increases(&depths, 1), 7);
+        assert_eq!(find_sliding_window_increases(&depths, 3), 5);
     }
 
     #[test]

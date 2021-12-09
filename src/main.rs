@@ -28,9 +28,26 @@ fn decode_segments(d: &Vec<(Vec<String>, Vec<String>)>) -> Vec<u32> {
     //  6
     d.iter()
         .map(|input_output| {
-            let mut opts = [127;7];
+            type Options=[u32;7];
+            let mut opts : Options = [127;7]; // what segment options remain possible by letter
+            let build_number_by_segments = |x: &[u32;7]| -> HashMap<u32,u32> {
+                // builds a mapping from segment identifiers -> number
+                let mut mapping = HashMap::<u32,u32>::new();
+                mapping.insert(x[0] | x[1] | x[2] | x[4] | x[5] | x[6], 0);
+                mapping.insert(x[2] | x[5], 1);
+                mapping.insert(x[0] | x[2] | x[3] | x[4] | x[6], 2);
+                mapping.insert(x[0] | x[2] | x[3] | x[5] | x[6], 3);
+                mapping.insert(x[1] | x[2] | x[3] | x[5], 4);
+                mapping.insert(x[0] | x[1] | x[3] | x[5] | x[6], 5);
+                mapping.insert(x[0] | x[1] | x[3] | x[4] | x[5] | x[6], 6);
+                mapping.insert(x[0] | x[2] | x[5], 7);
+                mapping.insert(x[0] | x[1] | x[2] | x[3] | x[4] | x[5] | x[6], 8);
+                mapping.insert(x[0] | x[1] | x[2] | x[3] | x[5] | x[6], 9);
+                mapping
+            };
             let is_found = |x: u32| -> bool { x == 1 || x == 2 || x == 4 || x == 8 || x == 16 || x == 32 || x == 64 };
             let map_segments = |x: &String| -> u32 {
+                // maps the input string to a number where each bit represents a letter
                 x.chars()
                     .map(|c| {
                          match c {
@@ -46,40 +63,44 @@ fn decode_segments(d: &Vec<(Vec<String>, Vec<String>)>) -> Vec<u32> {
                      })
                     .sum()
             };
-            let mut update_p = |x: &String| {
-                let segments = map_segments(x);
-                match x.len() {
-                    2 => (0..7).for_each(|i| {
-                        if i == 2 || i == 5 { opts[i] &= segments; } else { opts[i] &= !segments; }
-                    }),
-                    3 => (0..7).for_each(|i| {
-                        if i == 0 || i == 2 || i == 5 { opts[i] &= segments; } else { opts[i] &= !segments; }
-                    }),
-                    4 => (0..7).for_each(|i| {
-                        if i == 1 || i == 2 || i == 3 || i == 5 { opts[i] &= segments; } else { opts[i] &= !segments; }
-                    }),
-                    7 => {},
-                    _ => {},
+            let restrict_opts_based_on_found = |options : &mut Options| {
+                // if any numbers have been found, restrict remaining options
+                let mut changed = true;
+                while changed {
+                    changed = false;
+
+                    (0..7).for_each(|i| {
+                        if is_found(options[i]) {
+                            (0..7).for_each(|j| {
+                                if i != j && options[i] & options[j] > 0 {
+                                    options[j] &= !options[i];
+                                    changed = true;
+                                }
+                            });
+                        }
+                    });
                 }
             };
+
+            // limit what segment options are valid by the obvious numbers with unique segment counts
             input_output.0.iter().chain(input_output.1.iter())
-                .for_each(|s| update_p(&s));
-
-            let mut changed = true;
-            while changed {
-                changed = false;
-
-                (0..7).for_each(|i| {
-                    if is_found(opts[i]) {
-                        (0..7).for_each(|j| {
-                            if i != j && opts[i] & opts[j] > 0 {
-                                opts[j] &= !opts[i];
-                                changed = true;
-                            }
-                        });
+                .for_each(|s| {
+                    let segments = map_segments(s);
+                    match s.len() {
+                        2 => (0..7).for_each(|i| {
+                            if i == 2 || i == 5 { opts[i] &= segments; } else { opts[i] &= !segments; }
+                        }),
+                        3 => (0..7).for_each(|i| {
+                            if i == 0 || i == 2 || i == 5 { opts[i] &= segments; } else { opts[i] &= !segments; }
+                        }),
+                        4 => (0..7).for_each(|i| {
+                            if i == 1 || i == 2 || i == 3 || i == 5 { opts[i] &= segments; } else { opts[i] &= !segments; }
+                        }),
+                        7 => {},
+                        _ => {},
                     }
                 });
-            }
+            restrict_opts_based_on_found(&mut opts);
 
             vec![
                 (3, 1), // disambiguate 0
@@ -107,23 +128,13 @@ fn decode_segments(d: &Vec<(Vec<String>, Vec<String>)>) -> Vec<u32> {
                         i += 1;
                     }
                 });
-
-            let mut mapping = HashMap::<u32,u32>::new();
-            mapping.insert(opts[0] | opts[1] | opts[2] | opts[4] | opts[5] | opts[6], 0);
-            mapping.insert(opts[2] | opts[5], 1);
-            mapping.insert(opts[0] | opts[2] | opts[3] | opts[4] | opts[6], 2);
-            mapping.insert(opts[0] | opts[2] | opts[3] | opts[5] | opts[6], 3);
-            mapping.insert(opts[1] | opts[2] | opts[3] | opts[5], 4);
-            mapping.insert(opts[0] | opts[1] | opts[3] | opts[5] | opts[6], 5);
-            mapping.insert(opts[0] | opts[1] | opts[3] | opts[4] | opts[5] | opts[6], 6);
-            mapping.insert(opts[0] | opts[2] | opts[5], 7);
-            mapping.insert(opts[0] | opts[1] | opts[2] | opts[3] | opts[4] | opts[5] | opts[6], 8);
-            mapping.insert(opts[0] | opts[1] | opts[2] | opts[3] | opts[5] | opts[6], 9);
-
+            
+            // map output digits to a base 10 number resolved by mapping segments
+            let number_by_segments = build_number_by_segments(&opts);
             let mut output_value : u32 = 0;
             input_output.1.iter()
                 .map(map_segments)
-                .map(|x| mapping[&x])
+                .map(|x| number_by_segments[&x])
                 .for_each(|x| {
                     output_value *= 10;
                     output_value += x;

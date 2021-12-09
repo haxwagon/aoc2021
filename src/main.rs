@@ -204,6 +204,25 @@ fn find_intersections(segments : &Vec<((u32,u32),(u32,u32))>) -> (HashMap<(u32,u
     (intersections, num_intersections)
 }
 
+// find low points in input, return point and its risk
+fn find_low_points(d: &Vec<Vec<u8>>) -> Vec<((u32, u32), u32)> {
+    if d.is_empty() { return Vec::new() }
+    let calc_low_point_risk = |x: usize, y: usize| -> Option<u32> {
+        if x > 0 && d[x][y] >= d[x-1][y] { return None; }
+        if x < d.len() - 1 && d[x][y] >= d[x+1][y] { return None; }
+        if y > 0 && d[x][y] >= d[x][y-1] { return None; }
+        if y < d[0].len() - 1 && d[x][y] >= d[x][y+1] { return None; }
+        Some(d[x][y] as u32 + 1)
+    };
+    (0..d.len())
+        .flat_map(|x| (0..d[x].len()).map(move |y| (x, y)))
+        .filter_map(|pt| match calc_low_point_risk(pt.0, pt.1) {
+            Some(risk) => Some(((pt.0 as u32, pt.1 as u32), risk)),
+            None => None,
+        })
+        .collect()
+}
+
 fn find_sliding_window_increases(d: &Vec<u32>, window: u32) -> usize {
     d.iter().enumerate()
         .skip(window as usize)
@@ -331,6 +350,7 @@ fn main() {
     let digit_counts = count_digit_segments(&data::get_digit_segments());
     println!("Day  8: There will be {} 1s, {} 4s, {} 7s, {} 8s for a total of {}", digit_counts[1], digit_counts[4], digit_counts[7], digit_counts[8], digit_counts[1] + digit_counts[4] + digit_counts[7] + digit_counts[8]);
     println!("      : Total of outputs={}", decode_segments(&data::get_digit_segments()).iter().sum::<u32>());
+    println!("Day  9: Total risk of low points={}", find_low_points(&data::get_height_map()).iter().map(|x| x.1).sum::<u32>());
 }
 
 #[cfg(test)]
@@ -420,6 +440,19 @@ mod test {
             263
         ");
         assert_eq!(find_increases(&depths), 7);
+    }
+
+    #[test]
+    fn test_find_low_points() {
+        let height_map = data::parse_height_map(r"
+            2199943210
+            3987894921
+            9856789892
+            8767896789
+            9899965678
+        ");
+        let low_points = find_low_points(&height_map);
+        assert_eq!(low_points.iter().map(|x| x.1).sum::<u32>(), 15);
     }
 
     #[test]

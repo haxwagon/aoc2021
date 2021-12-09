@@ -3,6 +3,164 @@ use std::cmp::{max, min};
 
 mod data;
 
+fn count_digit_segments(d: &Vec<(Vec<String>, Vec<String>)>) -> [u32;10] {
+    let mut digits = [0;10];
+    d.iter()
+        .flat_map(|input_output| input_output.1.iter())
+        .map(|entry| {
+            match entry.len() {
+                2 => 1,
+                3 => 7,
+                4 => 4,
+                7 => 8,
+                _ => 0,
+            }
+        })
+        .for_each(|num| digits[num] += 1);
+    digits
+}
+
+fn decode_segments(d: &Vec<(Vec<String>, Vec<String>)>) -> Vec<u32> {
+    //  0
+    // 1 2
+    //  3
+    // 4 5
+    //  6
+    d.iter()
+        .map(|input_output| {
+            let mut opts = [127;7];
+            let is_found = |x: u32| -> bool { x == 1 || x == 2 || x == 4 || x == 8 || x == 16 || x == 32 || x == 64 };
+            let map_segments = |x: &String| -> u32 {
+                x.chars()
+                    .map(|c| {
+                         match c {
+                             'a' => 1,
+                             'b' => 2,
+                             'c' => 4,
+                             'd' => 8,
+                             'e' => 16,
+                             'f' => 32,
+                             'g' => 64,
+                             _ => 0,
+                         }
+                     })
+                    .sum()
+            };
+            let mut update_p = |x: &String| {
+                let segments = map_segments(x);
+                match x.len() {
+                    2 => (0..7).for_each(|i| {
+                        if i == 2 || i == 5 { opts[i] &= segments; } else { opts[i] &= !segments; }
+                    }),
+                    3 => (0..7).for_each(|i| {
+                        if i == 0 || i == 2 || i == 5 { opts[i] &= segments; } else { opts[i] &= !segments; }
+                    }),
+                    4 => (0..7).for_each(|i| {
+                        if i == 1 || i == 2 || i == 3 || i == 5 { opts[i] &= segments; } else { opts[i] &= !segments; }
+                    }),
+                    7 => {},
+                    _ => {},
+                }
+            };
+            input_output.0.iter().chain(input_output.1.iter())
+                .for_each(|s| update_p(&s));
+
+            let mut changed = true;
+            while changed {
+                changed = false;
+
+                (0..7).for_each(|i| {
+                    if is_found(opts[i]) {
+                        (0..7).for_each(|j| {
+                            if i != j && opts[i] & opts[j] > 0 {
+                                opts[j] &= !opts[i];
+                                changed = true;
+                            }
+                        });
+                    }
+                });
+            }
+
+            if opts[3] == opts[1] { // disambiguate from 0 and invalid
+                let mut i = 0;
+                while i < 8 {
+                    let check_digit = u32::pow(2, i);
+                    if opts[3] & check_digit > 0 {
+                        let check_0 = 127 & !check_digit;
+                        if input_output.0.iter().chain(input_output.1.iter())
+                            .map(map_segments)
+                            .filter(|x| *x == check_0)
+                            .count() > 0 {
+                            // we know that check_0 is a valid digit, thus check_digit is not a
+                            // possibility for opts[3]
+                            (0..7).for_each(|i| { if i == 3 { opts[i] &= check_digit; } else { opts[i] &= !check_digit; } });
+                        }
+                    }
+                    i += 1;
+                }
+            }
+            if opts[2] == opts[5] { // disambiguate from 6 and invalid
+                let mut i = 0;
+                while i < 8 {
+                    let check_digit = u32::pow(2, i);
+                    if opts[2] & check_digit > 0 {
+                        let check_6 = 127 & !check_digit;
+                        if input_output.0.iter().chain(input_output.1.iter())
+                            .map(map_segments)
+                            .filter(|x| *x == check_6)
+                            .count() > 0 {
+                            // we know that check_6 is a valid digit, thus check_digit is not a
+                            // possibility for opts[2]
+                            (0..7).for_each(|i| { if i == 2 { opts[i] &= check_digit; } else { opts[i] &= !check_digit; } });
+                        }
+                    }
+                    i += 1;
+                }
+            }
+            if opts[4] == opts[6] { // disambiguate from 9 and invalid
+                let mut i = 0;
+                while i < 8 {
+                    let check_digit = u32::pow(2, i);
+                    if opts[4] & check_digit > 0 {
+                        let check_9 = 127 & !check_digit;
+                        if input_output.0.iter().chain(input_output.1.iter())
+                            .map(map_segments)
+                            .filter(|x| *x == check_9)
+                            .count() > 0 {
+                            // we know that check_9 is a valid digit, thus check_digit is not a
+                            // possibility for opts[4]
+                            (0..7).for_each(|i| { if i == 4 { opts[i] &= check_digit; } else { opts[i] &= !check_digit; } });
+                        }
+                    }
+                    i += 1;
+                }
+            }
+
+            let mut mapping = HashMap::<u32,u32>::new();
+            mapping.insert(opts[0] | opts[1] | opts[2] | opts[4] | opts[5] | opts[6], 0);
+            mapping.insert(opts[2] | opts[5], 1);
+            mapping.insert(opts[0] | opts[2] | opts[3] | opts[4] | opts[6], 2);
+            mapping.insert(opts[0] | opts[2] | opts[3] | opts[5] | opts[6], 3);
+            mapping.insert(opts[1] | opts[2] | opts[3] | opts[5], 4);
+            mapping.insert(opts[0] | opts[1] | opts[3] | opts[5] | opts[6], 5);
+            mapping.insert(opts[0] | opts[1] | opts[3] | opts[4] | opts[5] | opts[6], 6);
+            mapping.insert(opts[0] | opts[2] | opts[5], 7);
+            mapping.insert(opts[0] | opts[1] | opts[2] | opts[3] | opts[4] | opts[5] | opts[6], 8);
+            mapping.insert(opts[0] | opts[1] | opts[2] | opts[3] | opts[5] | opts[6], 9);
+
+            let mut output_value : u32 = 0;
+            input_output.1.iter()
+                .map(map_segments)
+                .map(|x| mapping[&x])
+                .for_each(|x| {
+                    output_value *= 10;
+                    output_value += x;
+                });
+            output_value
+        })
+        .collect::<Vec<u32>>()
+}
+
 /// Returns (gamma, epsilon) aka (most common bits, least common bits)
 fn find_bit_frequencies(d: &Vec<u64>) -> (u64, u64) {
     #[derive(Debug)]
@@ -76,10 +234,10 @@ fn find_cheapest_alignment(d: &Vec<u32>) -> (u32, u32) {
     let mut best_pos = d.iter().sum::<u32>() / d.len() as u32;
     let mut best_cost = pos_cost(best_pos);
     let mut search = |dir : i32| {
-        let mut pos = (best_pos as i32 + dir) as u32; 
+        let mut pos = (best_pos as i32 + dir) as u32;
         loop {
-            let cost = pos_cost(pos); 
-            if cost < best_cost { 
+            let cost = pos_cost(pos);
+            if cost < best_cost {
                 best_cost = cost;
                 best_pos = pos;
             } else if cost > best_cost {
@@ -168,30 +326,71 @@ fn simulate_lanternfish(fish : &[u64;9], num_days: u32) -> ([u64;9], u64) {
 
 fn main() {
     let depths = data::get_depths();
-    println!("Depth Increases={}, Depth Sliding Window Increases={}",
-             find_increases(&depths), find_sliding_window_increases(&depths, 3));
+    println!("Day  1: Depth Increases={}", find_increases(&depths));
+    println!("      : Depth Sliding Window Increases={}", find_sliding_window_increases(&depths, 3));
     let cmds = data::get_cmds();
     let (distance, depth) = pilot(&cmds);
-    println!("Piloted forward {} and at a depth of {} for a total of {}", distance, depth, distance * depth);
+    println!("Day  2: Piloted forward {} and at a depth of {} for a total of {}", distance, depth, distance * depth);
     let diagnostics = data::get_diagnostics();
     let (gamma, epsilon) = find_bit_frequencies(&diagnostics);
-    println!("Gamma={}, Epsilon={}, Power Consumption={}", gamma, epsilon, gamma * &epsilon);
+    println!("Day  3: Gamma={}, Epsilon={}, Power Consumption={}", gamma, epsilon, gamma * &epsilon);
     let bingo_data = data::get_bingo();
     match play_bingo(&bingo_data.0, &bingo_data.1) {
-        Some(results) => println!("Board {} wins bingo with a score of {}", results.0, results.1),
-        None => println!("No one wins bingo!"),
+        Some(results) => println!("Day  4: Board {} wins bingo with a score of {}", results.0, results.1),
+        None => println!("Day  4: No one wins bingo!"),
     }
     let (_, num_vent_intersections) = find_intersections(&data::get_vents());
-    println!("Number of vent intersections={}", num_vent_intersections);
+    println!("Day  5: Number of vent intersections={}", num_vent_intersections);
     let (_, num_lanternfish) = simulate_lanternfish(&data::get_lanternfish(), 80);
-    println!("There will be {} lanternfish after 80 days", num_lanternfish);
+    println!("Day  6: There will be {} lanternfish after 80 days", num_lanternfish);
     let (alignment_pos, alignment_cost) = find_cheapest_alignment(&data::get_crab_positions());
-    println!("The crabs would best align at position {} with a total cost of {}", alignment_pos, alignment_cost);
+    println!("Day  7: The crabs would best align at position {} with a total cost of {}", alignment_pos, alignment_cost);
+    let digit_counts = count_digit_segments(&data::get_digit_segments());
+    println!("Day  8: There will be {} 1s, {} 4s, {} 7s, {} 8s for a total of {}", digit_counts[1], digit_counts[4], digit_counts[7], digit_counts[8], digit_counts[1] + digit_counts[4] + digit_counts[7] + digit_counts[8]);
+    println!("      : Total of outputs={}", decode_segments(&data::get_digit_segments()).iter().sum::<u32>());
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn test_count_digit_segments() {
+        let digit_segments = data::parse_digit_segments(r"
+            be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
+            edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc
+            fgaebd cg bdaec gdafb agbcfd gdcbef bgcad gfac gcb cdgabef | cg cg fdcagb cbg
+            fbegcd cbd adcefb dageb afcb bc aefdc ecdab fgdeca fcdbega | efabcd cedba gadfec cb
+            aecbfdg fbg gf bafeg dbefa fcge gcbea fcaegb dgceab fcbdga | gecf egdcabf bgf bfgea
+            fgeab ca afcebg bdacfeg cfaedg gcfdb baec bfadeg bafgc acf | gebdcfa ecba ca fadegcb
+            dbcfg fgd bdegcaf fgec aegbdf ecdfab fbedc dacgb gdcebf gf | cefg dcbef fcge gbcadfe
+            bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd | ed bcgafe cdgba cbgef
+            egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg cgb
+            gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
+        ");
+        let digits = count_digit_segments(&digit_segments);
+        assert_eq!(digits[1], 8);
+        assert_eq!(digits[4], 6);
+        assert_eq!(digits[7], 5);
+        assert_eq!(digits[8], 7);
+    }
+
+    #[test]
+    fn test_decode_segments() {
+        let digit_segments = data::parse_digit_segments(r"
+            be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
+            edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc
+            fgaebd cg bdaec gdafb agbcfd gdcbef bgcad gfac gcb cdgabef | cg cg fdcagb cbg
+            fbegcd cbd adcefb dageb afcb bc aefdc ecdab fgdeca fcdbega | efabcd cedba gadfec cb
+            aecbfdg fbg gf bafeg dbefa fcge gcbea fcaegb dgceab fcbdga | gecf egdcabf bgf bfgea
+            fgeab ca afcebg bdacfeg cfaedg gcfdb baec bfadeg bafgc acf | gebdcfa ecba ca fadegcb
+            dbcfg fgd bdegcaf fgec aegbdf ecdfab fbedc dacgb gdcebf gf | cefg dcbef fcge gbcadfe
+            bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd | ed bcgafe cdgba cbgef
+            egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg cgb
+            gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
+        ");
+        assert_eq!(decode_segments(&digit_segments).iter().sum::<u32>(), 61229);
+    }
 
     #[test]
     fn test_find_bit_frequencies() {
@@ -214,7 +413,7 @@ mod test {
         assert_eq!(epsilon, 9);
         assert_eq!(gamma * epsilon, 198);
     }
-    
+
     #[test]
     fn test_find_cheapest_alignment() {
         let positions = data::parse_positions("16,1,2,0,4,2,7,1,2,14");

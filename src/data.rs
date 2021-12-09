@@ -5222,3 +5222,224 @@ pub fn get_crab_positions() -> Vec<u32> {
 1101,1,29,67,1102,0,1,65,1008,65,35,66,1005,66,28,1,67,65,20,4,0,1001,65,1,65,1106,0,8,99,35,67,101,99,105,32,110,39,101,115,116,32,112,97,115,32,117,110,101,32,105,110,116,99,111,100,101,32,112,114,111,103,114,97,109,10,68,48,111,357,88,6,709,901,43,700,591,1146,317,930,727,806,194,1053,1093,819,530,2,1545,281,257,869,7,161,104,272,847,281,258,322,1076,214,1783,1499,55,985,220,1429,524,734,99,1067,1547,255,99,987,668,1095,529,233,324,61,23,45,259,169,13,618,1286,1293,468,1677,457,147,139,34,310,267,1132,451,529,853,324,779,0,554,91,72,694,442,79,1243,118,56,15,869,1075,931,33,585,392,15,15,861,1163,632,857,157,155,468,1073,299,1261,44,0,123,448,856,876,15,1032,310,322,1457,996,352,686,159,486,62,1035,540,685,242,198,1266,86,152,709,990,112,1479,605,274,233,1490,198,1349,2,1,666,628,878,262,960,709,414,740,322,389,45,517,1078,1030,884,286,300,101,671,286,948,209,354,1342,86,746,1308,181,479,300,129,45,5,1003,1006,584,309,16,1064,756,35,349,634,680,601,397,179,754,302,172,397,665,33,508,27,858,369,1236,19,228,854,206,32,17,1062,123,3,1140,80,240,60,497,937,83,249,91,550,317,72,808,1406,122,455,214,110,16,690,27,988,611,946,70,138,1730,1216,1073,20,439,806,222,965,517,1413,251,1,62,23,308,215,218,366,1025,142,450,50,76,682,698,1309,1286,318,460,554,23,268,543,780,425,1078,250,203,817,44,978,94,425,52,272,157,485,187,221,1,475,221,233,1183,1985,29,211,409,793,60,178,241,167,150,382,957,49,202,181,285,116,889,490,826,553,216,176,151,1710,536,1196,297,1112,715,258,387,392,950,1284,733,405,77,1310,74,287,6,321,117,286,127,380,680,197,143,416,110,1236,236,74,59,1100,64,10,30,135,12,1077,481,774,878,879,387,1502,327,17,88,486,238,168,201,1307,831,750,132,281,198,707,609,80,94,204,399,106,257,419,464,73,384,1944,112,669,45,497,334,95,1689,477,257,781,1007,417,626,361,440,474,719,13,42,184,1618,415,832,911,1237,169,481,43,977,59,734,346,367,146,642,298,390,1669,1319,724,1586,980,499,276,387,75,1042,14,58,653,532,1327,631,908,498,48,1576,1476,84,1457,1601,569,851,4,410,215,417,269,797,556,99,1703,520,1523,79,862,1086,578,686,394,1120,304,20,463,14,135,0,560,517,1164,132,791,304,725,1143,1246,111,57,513,247,243,269,209,181,98,294,68,18,106,75,190,153,193,219,16,467,955,767,1002,127,196,272,30,800,899,241,40,265,468,524,45,831,379,759,722,734,27,99,1383,80,351,686,44,77,136,386,95,901,135,334,1117,982,151,310,253,529,479,349,252,333,360,166,440,492,652,60,1591,219,456,1308,164,1117,93,670,477,558,76,154,67,111,321,356,899,1039,8,577,80,124,231,4,798,559,178,598,42,379,12,306,245,133,60,564,530,173,114,774,405,961,131,620,549,51,1437,9,22,553,301,987,245,1538,127,213,0,778,15,211,921,0,133,1166,280,240,1225,580,967,431,625,1162,213,120,186,1633,583,1542,102,3,97,516,123,676,564,774,12,34,938,1529,493,772,124,1441,287,679,231,1147,159,141,22,678,678,292,933,12,123,751,1656,1396,240,115,221,880,962,1237,1402,179,572,766,224,838,766,269,792,1727,166,30,315,293,757,201,934,1687,346,1962,8,627,228,16,440,33,414,212,1032,730,575,284,445,1356,141,707,779,920,407,858,326,232,356,444,302,165,42,460,1726,481,276,293,873,528,260,1060,197,154,682,180,154,1162,93,160,387,478,406,1138,987,435,727,148,582,163,210,766,632,257,732,276,205,32,489,456,70,1295,755,98,547,1295,334,1436,52,1292,185,1044,311,1122,630,588,560,54,1651,387,112,992,512,195,1333,1623,492,125,61,739,373,135,1436,280,580,7,291,71,875,112,680,852,89,455,309,129,173,530,90,245,921,1629,1592,465,146,1008,304,553,823,378,519,10,151,952,152,284,44,718,1,260,1268,94,1425,156,55,389,505,1176,487,596,16,888,26,1710,1232,1388,21,902,608,18,163,5,908,184,452,1362,493,261,595,1115,156,0,205,337,913,205,59,1143,99,538,1471,662,405,61,7,714,575,216,470,341,149,759,1286,414,367,79,134,426,41,389,1191,188,17,1227,27,929,798,21,81,65,1381,593,1360,106,760,505,1125,364,370,18,89,826,33,256,941,687,38,715,1091,175,1451,1,263,311,927,1893,681,565,364,113,1205,849,129,98,384,495,1785,804,60,128,852,93,983
     ")
 }
+
+pub fn parse_digit_segments(s: &str) -> Vec<(Vec<String>, Vec<String>)> {
+    let mut entries = Vec::new();
+    parse_input(s, |parts| {
+        let mut parts = parts.iter()
+            .map(|s| s.to_string())
+            .collect::<Vec<String>>();
+        if let Some(slash_at) = parts.iter().position(|p| p == "|") {
+            let mut output = parts.split_off(slash_at);
+            output.remove(0);
+            entries.push((parts, output));
+        }
+    });
+    entries
+}
+
+pub fn get_digit_segments() -> Vec<(Vec<String>, Vec<String>)> {
+    parse_digit_segments(r"
+cgaed gcdbfa gcfaed gfcde gadfceb cdbfeg acg eacf eabgd ca | agc efcgbd cag eacf
+ga ega edgfa cafed gabd cefagdb begfad ebdgf fcbega cbgdfe | bgdef fdgeb dgabfe gea
+ged eg acfgd fdceb cdbefa dgcfe cebfdg edcbga egbf ceadfbg | dfcge dacegbf gcdbaef fdceg
+cbefg fedbcg bfdg abgedc fgced edcagf caefb gb fedcbga beg | bdfg cbeaf cfdebg gbe
+gecdab gbafd geabdcf ecfa dbcfge cfb afgbc efgbac cf cgbae | fbc fbc cfebgad cf
+cbdef febdga fba ba fadecb cgfea adbc cbafe fbedcag egcfbd | dfgbae fdcageb adcefbg efbdc
+gecdba ecafbg ecabg bgacfd gecaf feba aedbfgc fca gdfec af | fac af cfa eafbgc
+geab adgfc gacef acgefdb gecfba eg dbfgec beacf afedbc ecg | baeg fgadc fagbce edfgbca
+gebcfad dafceg gdcaf bdfgea ab befgc gfbca bdca gab dgabcf | bga fgceb bag gfeabd
+efgcdb egd gceaf dabgcf ed acegd gdbaefc dabe dgacb adcebg | afecg ed de egcfabd
+eb efb eafgbd bgce adcfe fbcgd fgdbac bdefcg fcdbe fcebadg | ecgb bcdagef bcge egfcbad
+cafgbde aced gfdaec defgbc ce gec gfdca bfgacd afgeb cegaf | cafegdb efabg cfbged eafgdcb
+gcedba dgbe eba ecadgf bcfda bfegca eb gfecadb abcde egcad | eb be bea aeb
+fgcd bcf edfbg dbgeafc fc efdbc fcdbeg beacd adgebf aebfcg | cf dgcf cf dceab
+decag bade ad gda gadceb fgcbae adfgcb dfecg gceab edfgcab | adg gbcae gda da
+adbgfe fd dbgf gdeaf agfeb agcde gedabcf afcedb gbceaf daf | afdeg bagefc afd bagfecd
+cgeabfd efbgac dgcfba gbfd dcageb dga gd bgcaf fgadc aecfd | fbdg agd fgcbade gdfb
+efdgc gfdb cegbfd bdefcga bcgef bacdge eafcd afgecb cdg dg | gd dgfce dg dcg
+edgabc cgaf gdbfa cafdgeb dbfacg gdc adfebg fgbcd gc bcdef | bgacfd cdg ebfdc cafg
+bcdfage ebgdac dcb adce cd acdgb bcfedg gbace dbfag fgceab | dcebfga caed eacd bgceda
+fd gafcdb feadcgb dacefb gdfab fagcbe gcdf bdf edagb gacfb | dfb gcfabe bgdaf bfd
+daefcb cg gfdea ceg ecfabg beafc gecdafb eafcg bcfg abdcge | gec egafc eabcf edbgac
+degafbc fgeac gb acbeg bcead dcafge bcfg gbe bcgefa edafgb | fbaecgd bcgf beg bg
+adeg ga agfcbde gadefc fbcged acg gefdc gcbeaf acdbf acgfd | cebgfda cag cfegab gac
+bfegda eag dbcafg gfedabc fegcab afgbd ae faed dbaeg bdecg | fadgcb afed bgadcfe ecgabfd
+bcdga bgd cdfag dbaec dcfgeab cadfeg gb cdgbfa fdcebg gbfa | bdg bg adcefbg efagbcd
+acfgbed eagdcf cgdb db gdcbfa acbdf cbefa gadfc gbadfe bfd | bfd acfbd db gfdeac
+agbed geaf cfbgaed dae ae deafcb fbcdeg dgefb dgcab fbegad | defabg cbdafeg febdcga acbgd
+bcade fdecba bgceaf acg ecdfg adbg cgfdbae bcgead ga eacgd | cga afdceb cdgbea ga
+agcefb cbfdaeg fabce eg dcgfb bcadfe gace bedagf gbefc beg | fegabd ceag ge dbeafc
+efbgc ebgfa dacegfb daegf bcfgea dbcgef abfc agbecd ba bag | ab ab dcegbf cbaf
+aebf fed fdbacg fe gdeacf egdfb ecgfabd gcdbe fbaedg fabdg | def aebf fe ef
+adf cgabfd daegf af edfgc egbcfad gcbdae ebaf gbeda faedgb | feba eafb feba abgcdf
+gab gcfb cgbdae defab afbdg acefdg bfgdac bg eafcbdg cagfd | bfgc fdbgeac cbaegd cfbg
+eagfbd fcbgd baceg dba bcdgfe facgbd da dafc cgafedb bcdga | fdca afdc cbfegd gebfdac
+feacgb gbfac dag dbac cdfgea gfebacd gfdeb gdfba da dfgcab | dga aedgfbc ad cdba
+cfdabg ecag ecgadb eg ebg faebd dgbea dacfegb gbdca bgfecd | dgcefb baedg ecbafdg bge
+bfdec fgdbce debga adecfb fa face dgfabec bfdae gacbfd bfa | afec af fa cfea
+fcbad ecd fbagecd deabg gaedbc fgbdae ec adbce aecg ebfcdg | ec gcea ced ec
+dg efbcgd cfdbaeg cfdga adeg bagcfe caefgd gdf feacg cdfab | gaedcbf abcfd dg dfegca
+fdgbe gbc egfcdb cbdeg dcbf ecgad bc gcbafe beadfg bgdface | bfcd bfdc gcebfda bc
+gace gcefb cgdebf ac cfa fbeac fgcdeba ebafd bagcdf gfacbe | ac feacdgb bcfea gafbdce
+fcbega dfgcab gacbedf fgeca cbeg gc fegdba gac ecfda egabf | cbge ebgc gdebacf gc
+cbga bdceaf bgfdec ba efgab aeb efcbga gdaef egbcf abgcdef | bacfde cgafbe dbcgaef fcgebda
+fdcba bgfcd fdbaecg fcgaeb cegd bfgdae dgefb dfcgeb gc gbc | degc cgb cegd gdbaefc
+caedgf bge dacbg be dbfecag cgbefa eagfc ebaf ecbag fdcbeg | beg eb agceb egfdac
+dacgbef gebdfa bdcfga cgd adfgec cd cdba cdfbg ebcgf fdgab | defcga bcda acbd bgefc
+fdgac cebf baedc dceaf adfcbe bfedga edgcba fe fed edabfgc | adcfg dagefbc egbcda fdceba
+dagfbc fceabd fgbc edbcafg bdf bf bdgae afgcd fbdga gaefdc | gdcbfa bf bf fbcg
+dgfcb abdfe fgadbc cfbgae gadfb afg cdgbefa cagd fcgdbe ag | gaf dabegfc fadgb ebacdfg
+gbedc faced dfb fbegadc fcdbe fcdgab bf bdafce beaf edfacg | bf fb bf dfb
+aegcfb dacgbfe fc ebcag acgebd acef cfbag cgf cbedfg fagdb | acgeb cbega bfdcgea debfgac
+dgcfabe bgad eab agedc befcg cbaegd cefabd gaecb dceagf ab | bagd agdfce bea ba
+fgbde fgba efb bf fcdgae afdeg afbecd becgd efdcbga dfegab | bgaf fb bf gefad
+fb acgefb egafd baf adefb dcageb bdafce aefgdcb decab cbdf | dfcb afb fb begfadc
+edcaf dgabfe ceb bgdc cb gaefcb fdgceb ecdfgba begdf bdcfe | cb gfdceab dbcfe bc
+gedfcba bcdaeg dgae gca gdcbe afbdgc gfdcbe agcbe eafcb ag | gcbeafd agc bdegafc daebcg
+aebcfg fagdc fcgea fgdebca ecabf ge feg bcge fgadeb cdebaf | fgeca ecgb eg gcafedb
+aegcf becgdaf cbfag bafcd gcb cfgbde abdfce acdgfb bg dgba | egfcabd gb abdg gfcae
+egcab adfegb gc febgac dbcea fgce bgafcde cdgbaf fbgea cgb | fgce bgc gc cg
+cabfe dfa agdec df aecdfb cfbadg fagceb befd cfade dbaefgc | bcfgad faebcg df df
+gcab fbeadcg badcf ag fgaced gfabdc dgbfa fag bgfed afdbec | fabcd cdbfgea cgefdba gaf
+ae bdefac dacbf ecabd afdecgb feacbg eba aedf bcgde dfgcab | bae edaf ae ea
+fdgba bdgeca cgb fdgec gbcadef dgabef bcagdf bc fbac gbcfd | cbg bc cfbgd dfcagb
+afdgbce geac egfdca acbedf fgdce faced eg efg dgbaef bdcgf | dcfbeag afbegcd ge cega
+daf fdaeb df dbfg dbeca egfab cegabf cfeadg cbdaefg dfbaeg | fda agfbe dfgb afd
+gdcabe bfc dgbefca fc aebgc dcabfe efbgac fbcga agbfd efgc | bacdeg bfc cf bcgdeaf
+cf fgdbe deacfg dbcea efdcb bfcg fdebcg fdc befdag gebdfca | cf cgbf fdegabc defbgac
+gdfba fceadg cb fbcgd cgeb cdefg cdb bdfcae fgdcbe gbedfca | dbc cb fgbdc dfcagbe
+dbgcaef dbfc eafgb fd dgbaec bcdag daf dfcaeg bdgfa bfcagd | adf fd df cdaefg
+cd cfedb cgadebf efbgc abdfec edfab cadefg abcd dcf gbeadf | dc debcf fdc fbagcde
+cgdfbae fe gecfd defb adcgeb caefgb fge dcgeb cgedfb cdfga | fe fge befgac fedb
+egadb bdfge gcebdf ga cfdgabe edabc gdfa beafgd abg bacgef | fdga fbcdeg fedagbc bag
+gbdea bfaeg fba gabcdf gadbec bf dbef egabdfc cfeag dfbgea | fb bacegfd dfeb bf
+ebdac becfda bd bedfga edgcafb bed aecdg ebafcg dbcf abfec | cdfeab dbe cdfb ecabfd
+gfbac dcage dfgace abgfed fgcdaeb fd agcebd defc gafdc gdf | ebdagfc gdf cdef dfg
+bcfdeg dgceaf cea fecgb cbafe ea geab adcfb bdfgcae gcefab | egbcfa geba gdecaf caebf
+gd agebc fgcd dbg fdgecb egfbda fbdgaec fcdeab bfdce bcdeg | caefdbg cagfebd debcfga cdgf
+edc acged fcea ce dgecaf ebgdfc bcafgd fdcga acbgedf aegbd | gbfadce gbdefc ce afec
+gfebd agbcfd acdbf caefdb abgefc gbfadce abe eacd ae dafeb | ae dbcfgea ea edac
+aebcf dea gdacfe gfad adcgbfe caedf gbdeca ad dgcbef cfdeg | ade fdecga ad eda
+eabgcd gdaeb faebgcd gaedf fdcbea efd ef efgb fgcad daefgb | gfbedac fecabgd fceabd dbfaec
+cbeaf bafceg bfeg bcf bdcfag cdeaf fb edbcag bgeac cbgefad | abceg fb ebdafgc bf
+ced aecgfdb fdecgb gcefa agde ed efdca abfcd begafc agdfce | gead bdacf abfdegc decfa
+cda gdcaeb cadfe ebcagf cbefa dfabce gfdae cdfb cadgebf cd | dca cd bfdace aefdg
+gacfbde bg degcaf gfbce aefgcb cbdef egcfa acgb bge gfaedb | cagebdf dfaegc ebgfac bagc
+aefcd dfgea dfc cf fedcga cbdea adgefb adbgcf gecf gcbefad | cf dfagec fdc edfcbag
+gefbd adgf eafdb gd gecfb fedgba bgd acbfde cdfageb adgbec | fbdgaec dg gdb aecbdfg
+cdfabe cfga cg dcefa gce eagbd agced fcdeag gcefbd bdaefcg | gaedfc ecadgf gcfa dbega
+dgcea cfgebda dagb fgcaed bcg bg bcaef cedabg bcaeg cegfdb | cgbade bfdecag aedgc gfcbdae
+dbcfg cdfeg dbf befagc debfac agbd dgbcfa dbfgace db facgb | bd fbd bd bd
+dbefga efcadb cgdab cdbfa gad fdcbgea gbaec dg fcdg acfdgb | dg dgcba fgcd dg
+ebag gbafed fbdgac eb bdfag bef dfbge abegdcf fedcg acbdef | fgbade gabe edgbf fgcbdea
+deg bcgfad efdagb fedagcb eg ebcg cdafe decfg dgcfb dfcbge | cdbgf cgfedba bcge eagbdf
+egbdc efbgdc aec bagfecd eagcbd gbface ae adbe fadcg gcead | eac eca egbadc eac
+acedb fdcgea degabf ebcafd eb fceb agdbfec deb cgbad feacd | eb edb agbcdef cdabe
+gcdbfae eadb feacg ad dbcef dac bcedgf dbacgf cfdea bdafce | fdcbe dca fdebc caefg
+edfba cedf cebad ecdfab decabgf acgbe cgabfd ebgdfa adc dc | cad adc baecdf efabd
+caeg dbefg egdba afgbcd fbdcea cdgafeb ag agb bdecga adecb | ga gdaefbc ag dbeacg
+bf bagdcf gbfa dgaecf gdfcb fdgbcae fdb bfcdea gcebd cdfga | febcda bagf fb fgba
+cgbdef begfa agebd bdac da bgeacd ecdgb aed defacg cdbgfea | cbgdef da dbca ad
+aebfdg aegbdcf cdebg ebgcdf ef cbef dgbcae gfe gfcda gfedc | gcdbe fge efcdgba fe
+befad bcdf fce bgcaefd gaefdb dacfe cbefag gaecd caefbd cf | fce fc fdbc fc
+gecab gfeca eafdbcg bgcdae fdcgeb gbc dceafb gb dabg abedc | agbd gafce gcaeb cdbgea
+deabf dfg fcedgba bfgc fg cbdeag fedcga fbcadg cbgda afdbg | gbcf bgcad gdbca cgfb
+bcafgd gefba acg abec decgf gbacef ca gafdbe cafeg bgecafd | afgec fgecdba gbadfc bgcadfe
+febcgda ebga dgbecf efadbg ceafd eb edb bdgfac fbade fgabd | fdgba edb egab fdbga
+dgb dbce faebcg bd gfbdac fecgb gbfcade bdgef bgfdce edgaf | bd db dbg bcdgefa
+fdaeg afebgc dcf gcafbed cbfge dc dbcg bcfegd cbdefa edgcf | bcafge bagcfe agedf bgdc
+cgfb bacgdfe bdfeg fdebcg cb cdb edgfab edfca becdf gebacd | cdefb acdegb bc afdbeg
+gbdcaf gfbad gfdabce abfdce debagf gcfad ac gfced fca agbc | fca agcb egfdab gdcabf
+cedbagf edagc bge bcdge gbad gb bgefac aecfgd bdfec cegdba | gbefadc febgadc ebg cagde
+dfecga cdagbfe aegcd cdfg fegab bcfaed egafc cbegda fc fac | cdfg gdfbcae caf fc
+gecdf agdfe dga cfda cegbda bafeg ad caefgd dfagceb bfgdec | dag gefdca cdfbgea afbgdec
+deabf gdea bcaedf agdfeb dfg gd dcfabeg ecfbg edbfg bgdfac | gdf ecfgabd badgfc fgd
+gfabc gafce adeg bgdfce dabgefc eacdfg ea dfcge ebcafd afe | agcedf fcgedb fcdaeb becgfd
+dcbgeaf dbafec cafde beagdc gd dafg cfbge dge fegcda fgedc | dagf dgefc gd agdf
+egcbdf dafe dfbge adbgefc eadbg egabc gcfdba abgedf dba ad | begdf efabcgd eafd edaf
+cegd bcfde gfbcdea efdab dbcfg cef efbcdg ce abcfgd aecfbg | bedfc bfeda egcd dbefa
+abdceg acedg efbcg ab bcad gcabe bdfage afdgce agebdcf gba | gadbcfe gbeac bdgeacf fbgec
+dfba fcebad afgebc dbcea fcgdaeb befcd ebf gcdef fb eabgdc | bf efb bef agbfec
+cfgde geadb fgdbec gfcb fbd bcfade egdbf adcefg bedcagf bf | bf fcbg bdf gdcefba
+edf fgdbce agcfbe efbdga dafge beda de cbgfeda cdagf gafbe | ed gfead fed gcafd
+ebdg fcbedg cdbagf de fbedca fecag daegfcb cbgfd cedfg dec | fbedcg cde ecd bgefacd
+fbecgd gefca bcefa fgbeda deabgcf gc adgef cgad gfc gcefad | gc gc cfdega fcg
+cgefab afb abgfde gadfcbe fbgced dcbga fa gebdf gfbda efad | cegbfa fbegda edgbf baf
+dcbfg adce cegbd ed egcdbfa befagd bgace bcfaeg bdacge egd | fgdbeac geabdc begcadf acgefbd
+ebgfac dabcfe fea bdafcg ea defbg aecg fcagb cafebgd abfge | gcfab gbfea afe efa
+fdb beadfc decgb fd acdf dafbegc cfbed fcbaeg cabfe agfbde | fdb dcegb eabcf efcgdba
+cbad dae dcbge feabg da gcbdef gaedb dbcegaf edagbc dgecfa | ade ade da adcb
+fbe dcbefg fe adfbce gebdacf fbadcg baceg bdacf fead fceab | debfgc ef ef bcaeg
+ab cbgdfae cbdagf dceabg ebad bag gdbce edfbcg cefga ebcag | dabe ba fagdebc gcbde
+cdagbf fcadbe gac acgbd bgcde cgbafe eabgcfd ga adgf cbafd | ag agfd adfg cbgafd
+edca eagcfbd dbgae dge ed bgcad bdcfga fagbe gbcaed gebdfc | cead gde deg fcdgbe
+edb abfgecd edgf fgaeb bdage cadgb fdcbea de fbedga abfceg | eadfcb bedgcfa bed dbe
+faedgbc cfebad dbecf afeb ab afdcg dba adbfc aedgcb ebfcgd | dab fcgad dbgefca dcfga
+aedc dagbcf afbdce gfbed cd efbac acefgb dcefgba cfebd dcf | fbcagde eadbfcg cd bedfg
+agedbc egdcb eb bgea bedfac dbgca cgfde edgabfc cbe dbfcga | ecdgb fdcge bega dfebca
+dfbeac gcdefa cf fbcea ebadf efc gdfaeb abgce ebfcdag fdcb | ecf bgeac fc fcbd
+gacdef dbeaf dgaefb fc dcafgeb ebcdfa gbecd bcdfe cdf abfc | cdf fdc egfbdca cf
+ecfdba be bgce fcedag abdfg gbfed acgdfbe cefdbg cefgd dbe | deb be dfbag cgeb
+bfgac acbfgd fga dgbca gbaefd efgcb cdefbga dgeacb af fdca | fadcebg fa adfgbec fa
+dbgeac gd decg dabegfc dbeacf eadcb fdbega adgbc gbfac dbg | cdeg dabgc ecdba agcdbe
+daebg ecgfd cbfeadg eabf degcba fgbdca afg gfaedb gfaed af | dcabge baef agf feab
+edcgab dfcbage bfga becgfa gca efdca gfbdec ga becgf fecga | ebagcf gfba bgaf ebfcgd
+bdfeag dcbfeag eg cdge afbec gea ecgaf fgadbc fcgeda fgdac | eg eagfc cdeg egcd
+gdbeacf dfcgba ebafd ag bgaecf bcfgd afg gdafb bedgfc dacg | dgac gdca gfa gefbca
+afbedc bfd gdbce bedafg gdfeb bf eacbfgd gefad agdefc bgaf | feagd bafdge fbag bdcafe
+cae becgad gdabe ac cagb cgafde ebdac fcbde abcdfge degbaf | dbefga adcbge dgfeba fegbdac
+caedb adb ecfgdab gdaec gbdeca ab cgdefa fgdcab dcbef eagb | gfaedc ba ba bcgafd
+dcefa gcd agdfc bgeadc dg fgceabd dfgaec dfeg gbcaf dbfeac | bcgead fgacebd gcbaed bagcf
+adbgce cd cdeg adc bcedgaf fbeac bdace ebdga afbged cbdagf | dac gedc cda dc
+ad dfbce cdabf fgbca edbcga fead ebdgcaf bgfedc dac bcfade | eafd ad fgcab fbaecd
+bfgdae baegf cbfeagd ebdaf fedca dabg dbe efbcgd db abgfec | bdfeag egbaf db gbda
+gcfea eafdb eabgcfd egafb gadfeb gb fdgb bdafec ebg egabdc | decabf acdgfbe dbfg bfgd
+gebaf cedgbf acbeg cbagdfe fbe acbf gaefd gcbdae fb gecfba | agfdceb bf bfca acbf
+cegabfd fc gaefbd cbdea fadec fecg afc gecadf cbgdaf dgefa | cfbgda fac dfeca abgdcef
+ab gdfea egba afegdc fdbae cfedb bad aefdbcg dgfcab egdbaf | facgdb abfedgc ab ba
+af fgbeadc ceadg cfeagb fgdbae efa egfad efgdb fdab begdfc | dbfeg fa af bafd
+dfgecb cgabf cdaefbg adbcge dabeg bec ec aecbg febdag aced | aebgfcd fgedba aedcgb adecbgf
+bcadef cbfgd dcagbf dfe febg befcgd degfc degac bfagced fe | fde efdbgca gcbfdae fgbe
+fgd edfc fgedca gafdebc febga agedf eadcg gdebca dacbfg df | cdef dgeca bdcfga efdc
+aedcfbg dfceba eb caegdb begca fbacg bea egdb ecagd dgcafe | eba gdeac abe bgde
+cg fcdg deacbgf cdgbaf fbcea abfgd gac badceg facgb dbfage | dfcg fabedg gc cgebda
+bdgae eg defba gcedab bgadc dbfcag egbc ged gafcde cfbagde | geafbdc bfead ged bgead
+agefc cgdef cgfdea ca fcdabg fecdgba aedc bgfae fac dgcbfe | fgecd agefc gafdec ceafg
+ca cagbfd efbdc fac afecd aebc cadbef gfaedbc dbgefc feagd | ac dfgcabe defbc cdafbg
+cdb ecfab gbcaed cafdg gbfd db adbcf cdagef afgcdb cfdebga | db bcdgae dbc db
+begfcd ag cgaebf gfbcdea bdgeaf gead bgadf agf fdgeb acdbf | gfbad ag fadcb ga
+ad gbced dab bcfage adbge afegb fcagdeb fbdaeg dagf acbdfe | fadcgeb bedga gdfa gdbeaf
+begfdc fgdcb fgadbe caebg cagfdb efg edcf ebcgf ef efbdgca | degafb gef fagbcd feg
+ecfdg gfbed gdac acgbfe cdafe bafdgce gec dfecga cg afcdbe | cg gc abcdfge ceg
+deabg gea egdfcab bgcda gbfe fdbgae efcdag fadbe eg efadcb | gafbcde ega gfeb dfgbcae
+ef gecadb adbeg defbg fcbgd fgae feb efgabd bedfca facbdeg | efb bef ef agef
+cefga cfd fcebdg ceagbd bfdg bfdeac gcbde gfdce agcdfbe fd | faedgcb fdc dcgfbe cdf
+dfce cgbfa gbadef df bfd gaecdb ebdgcf cgbde gdcfb acgbdef | fbd fd cgfba fdb
+dca da bdfgc cadbef ebfacdg eadb bfeac fdcgae bfcad fgecab | adeb abcfegd gbfcea ad
+gcedaf gfdecb gb caefg cebga fgacbe fabg dcabe agbfced bcg | agfb begca dcgeabf bg
+dbgac cdf fagde fedbacg fgdabc acdbge dfgca ecafdb gcbf fc | bcgf cfbg ebgcdaf bdagc
+ed fedag dge gceaf dfabg dcfe afdegcb aebfgc dgbaec dagecf | acgefb de afdeg gcdeba
+dca fcbdg fgecab ad adbcg debfgca ecbdag gceba facged edab | acefgb ad gfebdca fcdaegb
+edaf gfeab ebfgda dfbga dacgb gfbceda bgeacf df gfd bcdgfe | df fdg aegfdb feabg
+bcfagde dgabfc beafc geca fgcaeb fdbec ac fca gabfe gfdaeb | gcfbead fca gebfa caf
+aecbg cfeagd cadfbe dgceb cgfae edacfgb fecbag ba abc gfba | ab bca bca fbag
+bdc aebgc db cdgef dagb geabcf ebgacd gdebc aedcbf gadfbce | befacdg abgced dbc bdceg
+egbacfd dabgfc beagfd ef dbef dgbaf fge gcfade cgbea eafbg | dgcafe befd feg fedb
+faebd cbdaf edfgab fdcbeg dfgbe ae dagfce bedgafc ead beag | dea ae abcdfge fgedbac
+gfabd fagcde cdbefa gaebdf ecfdbga gaefd fab aebg cgbfd ab | ebga fdbeagc fba gadfec
+bfa cfga acbfe edcfbga fa fagebd bdcfe aecfgb ebdacg geacb | gfca bgace gafceb gcaf
+dgbae dcfegb bgdfc fagbcd gca dafc ca dabgfce cgbda agbecf | cafd ac cag cga
+fcag egdca gc agedb cgd adefc bcfged cbefad egcfad efcagdb | cg dcg cgd cgd
+ea fdeacb eab bgdefc adgcefb bfdga face cbdfe bedaf dcgaeb | gcbfdae ecdgbfa bea bae
+acbe ecd feacdb ec egafd eadcf cbdaf fgcdba cfbagde efcbgd | dgcabfe ce bgfedc egdbfac
+cdageb badf gbfcad fcgab fgadebc gecfd bd eacfbg dbg bgfcd | febcdag bd fadb fdba
+adgcbef bef cgedba fbecag efbca baegc bf gcdbfe bfga acefd | agfb bgfa gbaf bef
+bcfade agcde acd edcbg feagcd gdaf dbeacgf ad eafcgb fcega | cad gdcefab dgaf ebdgfca
+df abfce degbc cfd acgfed gbdf bacfegd efdcb badceg egfcbd | cebgd bgdf bceaf df
+bfdc eabdf ebcad fgead bcdeag fba bf bcedgfa cdebfa bcegaf | defba cfbd bdcf fabceg
+dbaefcg ec aec dfgbea cafeg aedcbg gacedf egadf gfcba cfde | eac efcd ec egcfda
+ecgfdab gcefb bcfa af cgfdbe aegbf ebadg eacgfd gbecaf afg | aedbg bafc acfb dgfbace
+    ")
+}
+

@@ -81,60 +81,32 @@ fn decode_segments(d: &Vec<(Vec<String>, Vec<String>)>) -> Vec<u32> {
                 });
             }
 
-            if opts[3] == opts[1] { // disambiguate from 0 and invalid
-                let mut i = 0;
-                while i < 8 {
-                    let check_digit = u32::pow(2, i);
-                    if opts[3] & check_digit > 0 {
-                        let check_0 = 127 & !check_digit;
-                        if input_output.0.iter().chain(input_output.1.iter())
-                            .map(map_segments)
-                            .filter(|x| *x == check_0)
-                            .count() > 0 {
-                            // we know that check_0 is a valid digit, thus check_digit is not a
-                            // possibility for opts[3]
-                            (0..7).for_each(|i| { if i == 3 { opts[i] &= check_digit; } else { opts[i] &= !check_digit; } });
+            vec![
+                (3, 1), // disambiguate 0
+                (2, 5), // disambiguate 6
+                (4, 6), // disambiguate 9
+            ].iter()
+                .for_each(|disambiguate| {
+                    if opts[disambiguate.0] != opts[disambiguate.1] { return }
+                    let mut i = 0;
+                    while i < 8 {
+                        let check_digit = u32::pow(2, i);
+                        if opts[disambiguate.0] & check_digit > 0 {
+                            let check = 127 & !check_digit;
+                            if input_output.0.iter().chain(input_output.1.iter())
+                                .map(map_segments)
+                                .filter(|x| *x == check)
+                                .count() > 0 {
+                                // we know that check is a valid digit, thus check_digit is not a
+                                // possibility for opts[disambiguate.0]
+                                (0..7).for_each(|i| {
+                                    if i == disambiguate.0 { opts[i] &= check_digit; } else { opts[i] &= !check_digit; }
+                                });
+                            }
                         }
+                        i += 1;
                     }
-                    i += 1;
-                }
-            }
-            if opts[2] == opts[5] { // disambiguate from 6 and invalid
-                let mut i = 0;
-                while i < 8 {
-                    let check_digit = u32::pow(2, i);
-                    if opts[2] & check_digit > 0 {
-                        let check_6 = 127 & !check_digit;
-                        if input_output.0.iter().chain(input_output.1.iter())
-                            .map(map_segments)
-                            .filter(|x| *x == check_6)
-                            .count() > 0 {
-                            // we know that check_6 is a valid digit, thus check_digit is not a
-                            // possibility for opts[2]
-                            (0..7).for_each(|i| { if i == 2 { opts[i] &= check_digit; } else { opts[i] &= !check_digit; } });
-                        }
-                    }
-                    i += 1;
-                }
-            }
-            if opts[4] == opts[6] { // disambiguate from 9 and invalid
-                let mut i = 0;
-                while i < 8 {
-                    let check_digit = u32::pow(2, i);
-                    if opts[4] & check_digit > 0 {
-                        let check_9 = 127 & !check_digit;
-                        if input_output.0.iter().chain(input_output.1.iter())
-                            .map(map_segments)
-                            .filter(|x| *x == check_9)
-                            .count() > 0 {
-                            // we know that check_9 is a valid digit, thus check_digit is not a
-                            // possibility for opts[4]
-                            (0..7).for_each(|i| { if i == 4 { opts[i] &= check_digit; } else { opts[i] &= !check_digit; } });
-                        }
-                    }
-                    i += 1;
-                }
-            }
+                });
 
             let mut mapping = HashMap::<u32,u32>::new();
             mapping.insert(opts[0] | opts[1] | opts[2] | opts[4] | opts[5] | opts[6], 0);

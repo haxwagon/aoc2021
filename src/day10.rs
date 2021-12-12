@@ -1,47 +1,53 @@
+use std::borrow::Cow;
 use std::collections::VecDeque;
 
 use crate::parsing;
 
 pub fn run() {
     let illegal_closings = find_illegal_closings(&get_chunk_boundaries());
-    println!("Day 10: Illegal closings score={}", score_illegal_closings(&illegal_closings));
+    println!(
+        "Day 10: Illegal closings score={}",
+        score_illegal_closings(&illegal_closings)
+    );
 }
 
 pub fn find_first_illegal_closing(s: &str) -> Option<char> {
     let mut stack = VecDeque::new();
 
     s.chars()
-        .filter_map(|c| {
-            match c {
-                '(' => {
-                    stack.push_back(')');
-                    None
-                },
-                '[' => {
-                    stack.push_back(']');
-                    None
-                },
-                '{' => {
-                    stack.push_back('}');
-                    None
-                },
-                '<' => {
-                    stack.push_back('>');
-                    None
-                },
-                _ => match stack.pop_back() {
-                    Some(expected) => if c == expected { None } else { Some(c) },
-                    None => Some(c),
-                },
+        .filter_map(|c| match c {
+            '(' => {
+                stack.push_back(')');
+                None
             }
+            '[' => {
+                stack.push_back(']');
+                None
+            }
+            '{' => {
+                stack.push_back('}');
+                None
+            }
+            '<' => {
+                stack.push_back('>');
+                None
+            }
+            _ => match stack.pop_back() {
+                Some(expected) => {
+                    if c == expected {
+                        None
+                    } else {
+                        Some(c)
+                    }
+                }
+                None => Some(c),
+            },
         })
         .nth(0)
 }
 
-pub fn find_illegal_closings(d: &Vec<String>) -> Vec<Option<char>> {
-    d.iter()
-        .map(|s| find_first_illegal_closing(s))
-        .collect()
+pub fn find_illegal_closings(d: &Vec<Cow<str>>) -> Vec<Option<char>> {
+    d.iter().map(|s| find_first_illegal_closing(s)).collect()
 }
 
 pub fn score_illegal_closings(d: &Vec<Option<char>>) -> u64 {
@@ -59,10 +65,9 @@ pub fn score_illegal_closings(d: &Vec<Option<char>>) -> u64 {
         .sum()
 }
 
-fn parse_chunk_boundaries(s: &str) -> Vec<String> {
-    parsing::parse_lines(s )
+fn parse_chunk_boundaries(s: &str) -> Vec<Cow<str>> {
+    parsing::parse_lines(s)
 }
-
 
 #[cfg(test)]
 mod test {
@@ -70,7 +75,8 @@ mod test {
 
     #[test]
     fn test_score_illegal_closings() {
-        let chunk_boundaries = parse_chunk_boundaries(r"
+        let chunk_boundaries = parse_chunk_boundaries(
+            r"
             [({(<(())[]>[[{[]{<()<>>
             [(()[<>])]({[<{<<[]>>(
             {([(<{}[<>[]}>{[]{[(<()>
@@ -81,14 +87,16 @@ mod test {
             [<(<(<(<{}))><([]([]()
             <{([([[(<>()){}]>(<<{{
             <{([{{}}[<[[[<>{}]]]>[]]
-        ");
+        ",
+        );
         let illegal_closings = find_illegal_closings(&chunk_boundaries);
         assert_eq!(score_illegal_closings(&illegal_closings), 26397);
     }
 }
 
-fn get_chunk_boundaries() -> Vec<String> {
-    parse_chunk_boundaries(r"
+fn get_chunk_boundaries() -> Vec<Cow<'static, str>> {
+    parse_chunk_boundaries(
+        r"
 [({<(({{(([([[{}{}](<>())][<(){}>[[][]]]){{(<>{})<{}()>}}](<<<()<>><()<>>>([<>[]])><{<[][]
 <<([{([<([{<<{[]<>}([]{})>><{(<>{})([][])}[[{}]((){})]>}([[([]<>)[<><>)]{<{}[]>{[]()}}]<<[{}{}]<<>{}>>{[{}<>]
 {<<[(<{<({[{[{[][]}{[]{}}](<[]<>>[<><>])}]}[<{(<<>{}>(()()))<(<>{})(<>())>}>{{{{()()}{<>}}}}])><<{{<{[
@@ -195,5 +203,6 @@ fn get_chunk_boundaries() -> Vec<String> {
 <<{((([<[(<[{<[]()>}{(())<()<>>}]>[{<[<>()]{()<>}>[{<><>}{[][]}]}{[<{}{}>({}<>)]{{[]()>{[]<>
 [[[{[[[{{<(<{{[]<>}[<><>]}({()()}[()[]])>[((<>[])(<>)){{()<>}([][])}])[{{{[]<>}<()[])}({<>[]})}(({
 {<<<(<(((({[[([])([][])]<<[]<>>>]}{{<{{}[]}(<>[])><{[][]}[[]{}]>}<{<()[]>}<{[]{}}{()<>}>>})){<<<[{[]<>}[[]
-    ")
+    ",
+    )
 }

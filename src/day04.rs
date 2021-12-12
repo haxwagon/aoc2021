@@ -3,25 +3,28 @@ use crate::parsing;
 pub fn run() {
     let bingo_data = get_bingo();
     match play_bingo(&bingo_data.0, &bingo_data.1) {
-        Some(results) => println!("Day  4: Board {} wins bingo with a score of {}", results.0, results.1),
+        Some(results) => println!(
+            "Day  4: Board {} wins bingo with a score of {}",
+            results.0, results.1
+        ),
         None => println!("Day  4: No one wins bingo!"),
     }
 }
 
 /// Returns index of winning board and score
-type Board = [u32;25];
+type Board = [u32; 25];
 pub fn play_bingo(calls: &Vec<u32>, boards: &Vec<Board>) -> Option<(usize, u64)> {
     let mut scores = Vec::<Board>::with_capacity(boards.len());
-    scores.resize(boards.len(), [0;25]);
+    scores.resize(boards.len(), [0; 25]);
     let board_wins = |b: &Board| -> bool {
         for row in 0..5 {
-            let r = 5*row;
-            if b[r] == 1 && b[r+1] == 1 && b[r+2] == 1 && b[r+3] == 1 && b[r+4] == 1 {
+            let r = 5 * row;
+            if b[r] == 1 && b[r + 1] == 1 && b[r + 2] == 1 && b[r + 3] == 1 && b[r + 4] == 1 {
                 return true;
             }
         }
         for c in 0..5 {
-            if b[c] == 1 && b[c+5] == 1 && b[c+10] == 1 && b[c+15] == 1 && b[c+20] == 1 {
+            if b[c] == 1 && b[c + 5] == 1 && b[c + 10] == 1 && b[c + 15] == 1 && b[c + 20] == 1 {
                 return true;
             }
         }
@@ -29,8 +32,10 @@ pub fn play_bingo(calls: &Vec<u32>, boards: &Vec<Board>) -> Option<(usize, u64)>
         false
     };
     let board_score = |board: &Board, score: &Board| -> u32 {
-        board.iter().zip(score.iter())
-            .filter_map(|pair| { if pair.1 == &0 { Some(pair.0) } else { None } })
+        board
+            .iter()
+            .zip(score.iter())
+            .filter_map(|(b, s)| if *s == 0 { Some(*b) } else { None })
             .sum()
     };
     for call in calls.iter() {
@@ -41,35 +46,40 @@ pub fn play_bingo(calls: &Vec<u32>, boards: &Vec<Board>) -> Option<(usize, u64)>
                 }
             }
             if board_wins(score.1) {
-                return Some((score.0, (call * board_score(&boards[score.0], &score.1)).into()));
+                return Some((
+                    score.0,
+                    (call * board_score(&boards[score.0], &score.1)).into(),
+                ));
             }
         }
     }
-    return None
+    return None;
 }
 
-fn parse_bingo(s: &str) -> (Vec<u32>, Vec<[u32;25]>) {
+fn parse_bingo(s: &str) -> (Vec<u32>, Vec<[u32; 25]>) {
     let mut calls = Vec::<u32>::new();
-    let mut boards = Vec::<[u32;25]>::new();
+    let mut boards = Vec::<[u32; 25]>::new();
 
-    let mut row : i32 = -1;
+    let mut row: i32 = -1;
     parsing::parse_input(s, |parts| {
         if row < 0 {
-            parts[0].split(",")
+            parts[0]
+                .split(",")
                 .map(|x| x.parse::<u32>().unwrap())
                 .for_each(|x| calls.push(x));
         } else {
             if row == 0 {
-                let new_board : [u32;25] = [0 as u32; 25];
+                let new_board: [u32; 25] = [0 as u32; 25];
                 boards.push(new_board);
             }
             let board = boards.last_mut().unwrap();
-            let numbers = parts.iter()
+            let numbers = parts
+                .iter()
                 .map(|x| x.parse::<u32>().unwrap())
                 .collect::<Vec<u32>>();
             let r = row * 5;
             for c in 0..5 {
-                board[(r+c) as usize] = numbers[c as usize];
+                board[(r + c) as usize] = numbers[c as usize];
             }
         }
         row = (row + 1) % 5;
@@ -84,7 +94,8 @@ mod test {
 
     #[test]
     fn test_play_bingo() {
-        let (calls, boards) = parse_bingo(r"
+        let (calls, boards) = parse_bingo(
+            r"
             7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1
 
             22 13 17 11  0
@@ -104,19 +115,21 @@ mod test {
             18  8 23 26 20
             22 11 13  6  5
             2  0 12  3  7
-        ");
-                        match play_bingo(&calls, &boards) {
+        ",
+        );
+        match play_bingo(&calls, &boards) {
             Some(result) => {
                 assert_eq!(result.0, 2);
                 assert_eq!(result.1, 4512);
-            },
+            }
             None => panic!("No winner found!"),
         }
     }
 }
 
-fn get_bingo() -> (Vec<u32>, Vec<[u32;25]>) {
-    parse_bingo(r"
+fn get_bingo() -> (Vec<u32>, Vec<[u32; 25]>) {
+    parse_bingo(
+        r"
 91,17,64,45,8,13,47,19,52,68,63,76,82,44,28,56,37,2,78,48,32,58,72,53,9,85,77,89,36,22,49,86,51,99,6,92,80,87,7,25,31,66,84,4,98,67,46,61,59,79,0,3,38,27,23,95,20,35,14,30,26,33,42,93,12,57,11,54,50,75,90,41,88,96,40,81,24,94,18,39,70,34,21,55,5,29,71,83,1,60,74,69,10,62,43,73,97,65,15,16
 
 83 40 67 98  4
@@ -718,5 +731,6 @@ fn get_bingo() -> (Vec<u32>, Vec<[u32;25]>) {
 10 64 92 82  1
 70 12 75 16 14
 68 50 35 73 26
-    ")
+    ",
+    )
 }

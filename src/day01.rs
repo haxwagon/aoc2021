@@ -3,20 +3,28 @@ use crate::parsing;
 pub fn run() {
     let depths = get_depths();
     println!("Day  1: Depth Increases={}", find_increases(&depths));
-    println!("      : Depth Sliding Window Increases={}", find_sliding_window_increases(&depths, 3));
+    println!(
+        "      : Depth Sliding Window Increases={}",
+        find_sliding_window_increases(&depths, 3)
+    );
 }
 
 pub fn find_increases(d: &Vec<u32>) -> usize {
-    d.iter().enumerate()
+    d.iter()
+        .enumerate()
         .skip(1)
-        .filter(|x| &d[x.0-1]  < x.1)
+        .filter(|(i, x)| &d[i - 1] < x)
         .count()
 }
 
 pub fn find_sliding_window_increases(d: &Vec<u32>, window: u32) -> usize {
-    d.iter().enumerate()
+    d.iter()
+        .enumerate()
         .skip(window as usize)
-        .filter(|x| (1..=window).map(|i| &d[x.0-(i as usize)]).sum::<u32>() < (0..window).map(|i| &d[x.0-(i as usize)]).sum::<u32>())
+        .filter(|x| {
+            (1..=window).map(|i| &d[x.0 - (i as usize)]).sum::<u32>()
+                < (0..window).map(|i| &d[x.0 - (i as usize)]).sum::<u32>()
+        })
         .count()
 }
 
@@ -30,7 +38,8 @@ mod test {
 
     #[test]
     fn test_find_increases() {
-        let depths = parse_u32s(r"
+        let depths = parse_u32s(
+            r"
             199
             200
             208
@@ -41,13 +50,15 @@ mod test {
             269
             260
             263
-        ");
+        ",
+        );
         assert_eq!(find_increases(&depths), 7);
     }
 
     #[test]
     fn test_find_sliding_window_increases() {
-        let depths = parse_u32s(r"
+        let depths = parse_u32s(
+            r"
             199
             200
             208
@@ -58,14 +69,16 @@ mod test {
             269
             260
             263
-        ");
+        ",
+        );
         assert_eq!(find_sliding_window_increases(&depths, 1), 7);
         assert_eq!(find_sliding_window_increases(&depths, 3), 5);
     }
 }
 
 pub fn get_depths() -> Vec<u32> {
-    parse_u32s(r"
+    parse_u32s(
+        r"
 118
 121
 123
@@ -2066,5 +2079,6 @@ pub fn get_depths() -> Vec<u32> {
 7951
 7967
 7963
-")
+",
+    )
 }

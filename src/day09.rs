@@ -1,23 +1,39 @@
 use crate::parsing;
 
 pub fn run() {
-    println!("Day  9: Total risk of low points={}", find_low_points(&get_height_map()).iter().map(|x| x.1).sum::<u32>());
+    println!(
+        "Day  9: Total risk of low points={}",
+        find_low_points(&get_height_map())
+            .iter()
+            .map(|(_, y)| y)
+            .sum::<u32>()
+    );
 }
 
 // find low points in input, return point and its risk
 pub fn find_low_points(d: &Vec<Vec<u8>>) -> Vec<((u32, u32), u32)> {
-    if d.is_empty() { return Vec::new() }
+    if d.is_empty() {
+        return Vec::new();
+    }
     let calc_low_point_risk = |x: usize, y: usize| -> Option<u32> {
-        if x > 0 && d[x][y] >= d[x-1][y] { return None; }
-        if x < d.len() - 1 && d[x][y] >= d[x+1][y] { return None; }
-        if y > 0 && d[x][y] >= d[x][y-1] { return None; }
-        if y < d[0].len() - 1 && d[x][y] >= d[x][y+1] { return None; }
+        if x > 0 && d[x][y] >= d[x - 1][y] {
+            return None;
+        }
+        if x < d.len() - 1 && d[x][y] >= d[x + 1][y] {
+            return None;
+        }
+        if y > 0 && d[x][y] >= d[x][y - 1] {
+            return None;
+        }
+        if y < d[0].len() - 1 && d[x][y] >= d[x][y + 1] {
+            return None;
+        }
         Some(d[x][y] as u32 + 1)
     };
     (0..d.len())
         .flat_map(|x| (0..d[x].len()).map(move |y| (x, y)))
-        .filter_map(|pt| match calc_low_point_risk(pt.0, pt.1) {
-            Some(risk) => Some(((pt.0 as u32, pt.1 as u32), risk)),
+        .filter_map(|(x, y)| match calc_low_point_risk(x, y) {
+            Some(risk) => Some(((x as u32, y as u32), risk)),
             None => None,
         })
         .collect()
@@ -26,9 +42,12 @@ pub fn find_low_points(d: &Vec<Vec<u8>>) -> Vec<((u32, u32), u32)> {
 fn parse_height_map(s: &str) -> Vec<Vec<u8>> {
     let mut rows = Vec::new();
     parsing::parse_input(s, |parts| {
-        rows.push(parts[0].chars()
-            .map(|c| c.to_string().parse::<u8>().unwrap())
-            .collect());
+        rows.push(
+            parts[0]
+                .chars()
+                .map(|c| c.to_string().parse::<u8>().unwrap())
+                .collect(),
+        );
     });
     rows
 }
@@ -39,20 +58,23 @@ mod test {
 
     #[test]
     fn test_find_low_points() {
-        let height_map = parse_height_map(r"
+        let height_map = parse_height_map(
+            r"
             2199943210
             3987894921
             9856789892
             8767896789
             9899965678
-        ");
+        ",
+        );
         let low_points = find_low_points(&height_map);
-        assert_eq!(low_points.iter().map(|x| x.1).sum::<u32>(), 15);
+        assert_eq!(low_points.iter().map(|(_, y)| y).sum::<u32>(), 15);
     }
 }
 
 fn get_height_map() -> Vec<Vec<u8>> {
-    parse_height_map(r"
+    parse_height_map(
+        r"
 9876567896542101249889965434567898765698785435678989898897654789424901245699887678932398943999888667
 5995456976543294398767896223456789654988654523599976677789765678919893456989776587891987899898765456
 6976577897664989985458989012345678969876543212388965435678996789909789579876543456789996789789894347
@@ -153,5 +175,6 @@ fn get_height_map() -> Vec<Vec<u8>> {
 9499998767899895678954349876456997889954334589979997598767894943767899865410387899985396543210345789
 5323987756789987989765212989567898996563125678989987679878943432356789876521239999876987654421256895
 6212976545678998999986433497678999765431016789990198789989432101245678989432445689989998765632867934
-    ")
+    ",
+    )
 }

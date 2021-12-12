@@ -4,22 +4,30 @@ use crate::parsing;
 
 pub fn run() {
     let digit_counts = count_digit_segments(&get_digit_segments());
-    println!("Day  8: There will be {} 1s, {} 4s, {} 7s, {} 8s for a total of {}", digit_counts[1], digit_counts[4], digit_counts[7], digit_counts[8], digit_counts[1] + digit_counts[4] + digit_counts[7] + digit_counts[8]);
-    println!("      : Total of outputs={}", decode_segments(&get_digit_segments()).iter().sum::<u32>());
+    println!(
+        "Day  8: There will be {} 1s, {} 4s, {} 7s, {} 8s for a total of {}",
+        digit_counts[1],
+        digit_counts[4],
+        digit_counts[7],
+        digit_counts[8],
+        digit_counts[1] + digit_counts[4] + digit_counts[7] + digit_counts[8]
+    );
+    println!(
+        "      : Total of outputs={}",
+        decode_segments(&get_digit_segments()).iter().sum::<u32>()
+    );
 }
 
-pub fn count_digit_segments(d: &Vec<(Vec<String>, Vec<String>)>) -> [u32;10] {
-    let mut digits = [0;10];
+pub fn count_digit_segments(d: &Vec<(Vec<String>, Vec<String>)>) -> [u32; 10] {
+    let mut digits = [0; 10];
     d.iter()
-        .flat_map(|input_output| input_output.1.iter())
-        .map(|entry| {
-            match entry.len() {
-                2 => 1,
-                3 => 7,
-                4 => 4,
-                7 => 8,
-                _ => 0,
-            }
+        .flat_map(|(_input, output)| output.iter())
+        .map(|entry| match entry.len() {
+            2 => 1,
+            3 => 7,
+            4 => 4,
+            7 => 8,
+            _ => 0,
         })
         .for_each(|num| digits[num] += 1);
     digits
@@ -32,12 +40,12 @@ pub fn decode_segments(d: &Vec<(Vec<String>, Vec<String>)>) -> Vec<u32> {
     // 4 5
     //  6
     d.iter()
-        .map(|input_output| {
-            type Options=[u32;7];
-            let mut opts : Options = [127;7]; // what segment options remain possible by letter
-            let build_number_by_segments = |x: &[u32;7]| -> HashMap<u32,u32> {
+        .map(|(input, output)| {
+            type Options = [u32; 7];
+            let mut opts: Options = [127; 7]; // what segment options remain possible by letter
+            let build_number_by_segments = |x: &[u32; 7]| -> HashMap<u32, u32> {
                 // builds a mapping from segment identifiers -> number
-                let mut mapping = HashMap::<u32,u32>::new();
+                let mut mapping = HashMap::<u32, u32>::new();
                 mapping.insert(x[0] | x[1] | x[2] | x[4] | x[5] | x[6], 0);
                 mapping.insert(x[2] | x[5], 1);
                 mapping.insert(x[0] | x[2] | x[3] | x[4] | x[6], 2);
@@ -50,25 +58,25 @@ pub fn decode_segments(d: &Vec<(Vec<String>, Vec<String>)>) -> Vec<u32> {
                 mapping.insert(x[0] | x[1] | x[2] | x[3] | x[5] | x[6], 9);
                 mapping
             };
-            let is_found = |x: u32| -> bool { x == 1 || x == 2 || x == 4 || x == 8 || x == 16 || x == 32 || x == 64 };
+            let is_found = |x: u32| -> bool {
+                x == 1 || x == 2 || x == 4 || x == 8 || x == 16 || x == 32 || x == 64
+            };
             let map_segments = |x: &String| -> u32 {
                 // maps the input string to a number where each bit represents a letter
                 x.chars()
-                    .map(|c| {
-                         match c {
-                             'a' => 1,
-                             'b' => 2,
-                             'c' => 4,
-                             'd' => 8,
-                             'e' => 16,
-                             'f' => 32,
-                             'g' => 64,
-                             _ => 0,
-                         }
-                     })
+                    .map(|c| match c {
+                        'a' => 1,
+                        'b' => 2,
+                        'c' => 4,
+                        'd' => 8,
+                        'e' => 16,
+                        'f' => 32,
+                        'g' => 64,
+                        _ => 0,
+                    })
                     .sum()
             };
-            let restrict_opts_based_on_found = |options : &mut Options| {
+            let restrict_opts_based_on_found = |options: &mut Options| {
                 // if any numbers have been found, restrict remaining options
                 let mut changed = true;
                 while changed {
@@ -88,56 +96,79 @@ pub fn decode_segments(d: &Vec<(Vec<String>, Vec<String>)>) -> Vec<u32> {
             };
 
             // limit what segment options are valid by the obvious numbers with unique segment counts
-            input_output.0.iter().chain(input_output.1.iter())
-                .for_each(|s| {
-                    let segments = map_segments(s);
-                    match s.len() {
-                        2 => (0..7).for_each(|i| {
-                            if i == 2 || i == 5 { opts[i] &= segments; } else { opts[i] &= !segments; }
-                        }),
-                        3 => (0..7).for_each(|i| {
-                            if i == 0 || i == 2 || i == 5 { opts[i] &= segments; } else { opts[i] &= !segments; }
-                        }),
-                        4 => (0..7).for_each(|i| {
-                            if i == 1 || i == 2 || i == 3 || i == 5 { opts[i] &= segments; } else { opts[i] &= !segments; }
-                        }),
-                        7 => {},
-                        _ => {},
-                    }
-                });
+            input.iter().chain(output.iter()).for_each(|s| {
+                let segments = map_segments(s);
+                match s.len() {
+                    2 => (0..7).for_each(|i| {
+                        if i == 2 || i == 5 {
+                            opts[i] &= segments;
+                        } else {
+                            opts[i] &= !segments;
+                        }
+                    }),
+                    3 => (0..7).for_each(|i| {
+                        if i == 0 || i == 2 || i == 5 {
+                            opts[i] &= segments;
+                        } else {
+                            opts[i] &= !segments;
+                        }
+                    }),
+                    4 => (0..7).for_each(|i| {
+                        if i == 1 || i == 2 || i == 3 || i == 5 {
+                            opts[i] &= segments;
+                        } else {
+                            opts[i] &= !segments;
+                        }
+                    }),
+                    7 => {}
+                    _ => {}
+                }
+            });
             restrict_opts_based_on_found(&mut opts);
 
             vec![
                 (3, 1), // disambiguate 0
                 (2, 5), // disambiguate 6
                 (4, 6), // disambiguate 9
-            ].iter()
-                .for_each(|disambiguate| {
-                    if opts[disambiguate.0] != opts[disambiguate.1] { return }
-                    let mut i = 0;
-                    while i < 8 {
-                        let check_digit = u32::pow(2, i);
-                        if opts[disambiguate.0] & check_digit > 0 {
-                            let check = 127 & !check_digit;
-                            if input_output.0.iter().chain(input_output.1.iter())
-                                .map(map_segments)
-                                .filter(|x| *x == check)
-                                .count() > 0 {
-                                // we know that check is a valid digit, thus check_digit is not a
-                                // possibility for opts[disambiguate.0]
-                                (0..7).for_each(|i| {
-                                    if i == disambiguate.0 { opts[i] &= check_digit; } else { opts[i] &= !check_digit; }
-                                });
-                            }
+            ]
+            .iter()
+            .for_each(|(good, bad)| {
+                if opts[*good] != opts[*bad] {
+                    return;
+                }
+                let mut i = 0;
+                while i < 8 {
+                    let check_digit = u32::pow(2, i);
+                    if opts[*good] & check_digit > 0 {
+                        let check = 127 & !check_digit;
+                        if input
+                            .iter()
+                            .chain(output.iter())
+                            .map(map_segments)
+                            .filter(|x| *x == check)
+                            .count()
+                            > 0
+                        {
+                            // we know that check is a valid digit, thus check_digit is not a
+                            // possibility for opts[good]
+                            (0..7).for_each(|i| {
+                                if &i == good {
+                                    opts[i] &= check_digit;
+                                } else {
+                                    opts[i] &= !check_digit;
+                                }
+                            });
                         }
-                        i += 1;
                     }
-                });
-            
+                    i += 1;
+                }
+            });
+
             // map output digits to a base 10 number resolved by mapping segments
             let number_by_segments = build_number_by_segments(&opts);
-            let mut output_value : u32 = 0;
-            input_output.1.iter()
+            let mut output_value: u32 = 0;
+            output
+                .iter()
                 .map(map_segments)
                 .map(|x| number_by_segments[&x])
                 .for_each(|x| {
@@ -152,9 +183,7 @@ pub fn decode_segments(d: &Vec<(Vec<String>, Vec<String>)>) -> Vec<u32> {
 fn parse_digit_segments(s: &str) -> Vec<(Vec<String>, Vec<String>)> {
     let mut entries = Vec::new();
     parsing::parse_input(s, |parts| {
-        let mut parts = parts.iter()
-            .map(|s| s.to_string())
-            .collect::<Vec<String>>();
+        let mut parts = parts.iter().map(|s| s.to_string()).collect::<Vec<String>>();
         if let Some(slash_at) = parts.iter().position(|p| p == "|") {
             let mut output = parts.split_off(slash_at);
             output.remove(0);
@@ -170,7 +199,8 @@ mod test {
 
     #[test]
     fn test_count_digit_segments() {
-        let digit_segments = parse_digit_segments(r"
+        let digit_segments = parse_digit_segments(
+            r"
             be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
             edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc
             fgaebd cg bdaec gdafb agbcfd gdcbef bgcad gfac gcb cdgabef | cg cg fdcagb cbg
@@ -181,7 +211,8 @@ mod test {
             bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd | ed bcgafe cdgba cbgef
             egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg cgb
             gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
-        ");
+        ",
+        );
         let digits = count_digit_segments(&digit_segments);
         assert_eq!(digits[1], 8);
         assert_eq!(digits[4], 6);
@@ -191,7 +222,8 @@ mod test {
 
     #[test]
     fn test_decode_segments() {
-        let digit_segments = parse_digit_segments(r"
+        let digit_segments = parse_digit_segments(
+            r"
             be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
             edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc
             fgaebd cg bdaec gdafb agbcfd gdcbef bgcad gfac gcb cdgabef | cg cg fdcagb cbg
@@ -202,13 +234,15 @@ mod test {
             bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd | ed bcgafe cdgba cbgef
             egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg cgb
             gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
-        ");
+        ",
+        );
         assert_eq!(decode_segments(&digit_segments).iter().sum::<u32>(), 61229);
     }
 }
 
 fn get_digit_segments() -> Vec<(Vec<String>, Vec<String>)> {
-    parse_digit_segments(r"
+    parse_digit_segments(
+        r"
 cgaed gcdbfa gcfaed gfcde gadfceb cdbfeg acg eacf eabgd ca | agc efcgbd cag eacf
 ga ega edgfa cafed gabd cefagdb begfad ebdgf fcbega cbgdfe | bgdef fdgeb dgabfe gea
 ged eg acfgd fdceb cdbefa dgcfe cebfdg edcbga egbf ceadfbg | dfcge dacegbf gcdbaef fdceg
@@ -409,5 +443,6 @@ df abfce degbc cfd acgfed gbdf bacfegd efdcb badceg egfcbd | cebgd bgdf bceaf df
 bfdc eabdf ebcad fgead bcdeag fba bf bcedgfa cdebfa bcegaf | defba cfbd bdcf fabceg
 dbaefcg ec aec dfgbea cafeg aedcbg gacedf egadf gfcba cfde | eac efcd ec egcfda
 ecgfdab gcefb bcfa af cgfdbe aegbf ebadg eacgfd gbecaf afg | aedbg bafc acfb dgfbace
-    ")
+    ",
+    )
 }

@@ -1,4 +1,3 @@
-mod parsing;
 mod day01;
 mod day02;
 mod day03;
@@ -10,6 +9,8 @@ mod day08;
 mod day09;
 mod day10;
 mod day11;
+mod day12;
+mod parsing;
 
 fn main() {
     day01::run();
@@ -23,5 +24,5 @@ fn main() {
     day09::run();
     day10::run();
     day11::run();
+    day12::run();
 }
-

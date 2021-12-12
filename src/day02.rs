@@ -3,27 +3,32 @@ use crate::parsing;
 pub fn run() {
     let cmds = get_cmds();
     let (distance, depth) = pilot(&cmds);
-    println!("Day  2: Piloted forward {} and at a depth of {} for a total of {}", distance, depth, distance * depth);
+    println!(
+        "Day  2: Piloted forward {} and at a depth of {} for a total of {}",
+        distance,
+        depth,
+        distance * depth
+    );
 }
 
 /// Returns (distance, depth) after piloting the moves
 pub fn pilot(cmds: &Vec<(String, u32)>) -> (u32, u32) {
     let mut depth = 0;
     let mut distance = 0;
-    cmds.iter().for_each(|cmd| {
-        match cmd.0.as_str() {
-            "forward" => distance += cmd.1,
-            "down" => depth += cmd.1,
-            "up" => depth -= cmd.1,
-            _ => {},
-        }
+    cmds.iter().for_each(|(dir, dist)| match dir.as_str() {
+        "forward" => distance += dist,
+        "down" => depth += dist,
+        "up" => depth -= dist,
+        _ => {}
     });
 
     (distance, depth)
 }
 
 fn parse_cmds(s: &str) -> Vec<(String, u32)> {
-    parsing::parse_input(s, |parts| (parts[0].to_string(), parts[1].parse::<u32>().unwrap()))
+    parsing::parse_input(s, |parts| {
+        (parts[0].to_string(), parts[1].parse::<u32>().unwrap())
+    })
 }
 
 #[cfg(test)]
@@ -32,14 +37,16 @@ mod test {
 
     #[test]
     fn test_pilot() {
-        let cmds = parse_cmds(r"
+        let cmds = parse_cmds(
+            r"
             forward 5
             down 5
             forward 8
             up 3
             down 8
             forward 2
-        ");
+        ",
+        );
         let (distance, depth) = pilot(&cmds);
         assert_eq!(distance, 15);
         assert_eq!(depth, 10);
@@ -47,7 +54,8 @@ mod test {
 }
 
 fn get_cmds() -> Vec<(String, u32)> {
-    parse_cmds(r"
+    parse_cmds(
+        r"
 forward 5
 forward 2
 forward 9
@@ -1048,5 +1056,6 @@ forward 8
 forward 5
 down 9
 forward 6
-               ")
+               ",
+    )
 }

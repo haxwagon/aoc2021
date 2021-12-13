@@ -52,9 +52,7 @@ impl Caves {
                     .or_default()
                     .push(to.clone());
             });
-        Self {
-            connections: connections,
-        }
+        Self { connections }
     }
 
     pub fn can_revisit(node: &str) -> bool {
@@ -62,30 +60,26 @@ impl Caves {
     }
 
     pub fn walk(self: &Self, start: &str, end: &str) -> Vec<Vec<String>> {
-        self.walk_internal(&vec![start.to_string()], start, end)
+        self.walk_internal(&vec![start.to_string()], end)
     }
 
-    pub fn walk_internal(
-        self: &Self,
-        so_far: &Vec<String>,
-        start: &str,
-        end: &str,
-    ) -> Vec<Vec<String>> {
-        let mut paths = Vec::new();
-        if so_far.last().unwrap() == end {
-            return vec![so_far.clone()];
+    pub fn walk_internal(self: &Self, crumbs: &Vec<String>, end: &str) -> Vec<Vec<String>> {
+        let last = crumbs.last().unwrap();
+        if last == end {
+            return vec![crumbs.clone()];
         }
-        match self.connections.get(start) {
-            Some(nexts) => nexts.iter().for_each(|next| {
-                if !so_far.contains(next) || Caves::can_revisit(next) {
-                    let mut new_so_far = so_far.clone();
-                    new_so_far.push(next.to_string());
-                    paths.append(&mut self.walk_internal(&new_so_far, next, end));
-                }
-            }),
-            None => {}
+        match self.connections.get(last) {
+            Some(nexts) => nexts
+                .iter()
+                .filter(|next| !crumbs.contains(next) || Caves::can_revisit(next))
+                .flat_map(|next| {
+                    let mut new_crumbs = crumbs.clone();
+                    new_crumbs.push(next.to_string());
+                    self.walk_internal(&new_crumbs, end)
+                })
+                .collect(),
+            None => Vec::new(),
         }
-        paths
     }
 }
 

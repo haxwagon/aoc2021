@@ -1,5 +1,4 @@
 use crate::parsing;
-use std::borrow::Cow;
 use std::collections::HashMap;
 
 pub fn run() {
@@ -43,7 +42,7 @@ pub struct Caves {
 }
 
 impl Caves {
-    pub fn new(d: Vec<(&str, &str)>) -> Self {
+    pub fn new(d: Vec<(String, String)>) -> Self {
         let mut connections = HashMap::<String, Vec<String>>::new();
         d.iter()
             .flat_map(|(l, r)| vec![(l, r), (r, l)])
@@ -90,14 +89,14 @@ impl Caves {
     }
 }
 
-fn parse_caves(s: &str) -> Vec<(Cow<str>, Cow<str>)> {
+fn parse_caves(s: &str) -> Vec<(String, String)> {
     parsing::parse_lines(s)
         .iter()
         .map(|s| {
             let mut parts = s.split("-");
             (
-                Cow::from(parts.next().unwrap()),
-                Cow::from(parts.next().unwrap()),
+                parts.next().unwrap().to_string(),
+                parts.next().unwrap().to_string(),
             )
         })
         .collect()

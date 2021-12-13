@@ -35,10 +35,12 @@ pub fn run() {
         "Day 12: There are {} ways through the cave",
         caves.walk("start", "end").len()
     );
+    /* expensive :(
     println!(
         "      : There are {} ways to walk through the cave with up to 1 small cave revisited",
         caves.walk_leisurely("start", "end").len()
     );
+    */
 }
 
 pub struct Caves {
@@ -93,6 +95,7 @@ impl Caves {
         self.walk_internal(&vec![start.to_string()], start, end, 0)
     }
 
+    #[allow(dead_code)]
     pub fn walk_leisurely(self: &Self, start: &str, end: &str) -> Vec<Vec<String>> {
         self.walk_internal(&vec![start.to_string()], start, end, 1)
     }
